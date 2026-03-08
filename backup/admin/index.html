@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harvin Properties — Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" />
+
+  <!-- Shared theme module — load before styles so login screen already has right theme -->
+  <script src="../js/theme.js"></script>
+  <script>
+    // Apply saved homepage theme to admin UI on load
+    (function() {
+      const t = ThemeManager.load();
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+
+  <style>
+/* ══════════════════════════════════════════════════════════
+   ADMIN-ONLY CSS VARIABLES
+   These map the shared ThemeManager palette onto admin tokens.
+   The homepage vars (--blue, --bg, etc.) are injected by
+   ThemeManager; here we alias them for admin components.
+   ══════════════════════════════════════════════════════════ */
+:root {
+  --font:   'Plus Jakarta Sans', system-ui, sans-serif;
+  --radius: 14px;
+  --transition: 0.22s ease;
+}
+
+/* Derive admin tokens from homepage palette */
+html {
+  --a-bg:           var(--bg, #F0F4FF);
+  --a-bg2:          var(--bg-subtle, #E4ECFF);
+  --a-card:         var(--bg-card, #FFFFFF);
+  --a-border:       var(--border, rgba(14,165,233,0.15));
+  --a-primary:      var(--blue, #0EA5E9);
+  --a-primary-dark: var(--blue-dark, #0284C7);
+  --a-primary-dim:  var(--blue-dim, rgba(14,165,233,0.10));
+  --a-glow:         var(--blue-dim, rgba(14,165,233,0.25));
+  --a-text:         var(--text-primary, #0F172A);
+  --a-text2:        var(--text-secondary, #475569);
+  --a-text3:        var(--text-muted, #94A3B8);
+  --a-shadow:       var(--shadow-card, 0 2px 16px rgba(14,165,233,0.10));
+  --a-sidebar:      var(--navbar-bg, rgba(255,255,255,0.97));
+  --a-topbar:       var(--navbar-bg, rgba(255,255,255,0.97));
+  --a-login-bg:     var(--hero-grad, linear-gradient(145deg,#E0F2FE,#F0F9FF,#EFF6FF));
+  --a-bar-bg:       var(--bg-subtle, #E2EDFF);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--a-bg);
+  color: var(--a-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ══════════════════════════════════════════════════════════
+   LOGIN SCREEN
+   ══════════════════════════════════════════════════════════ */
+#login-screen {
+  position: fixed; inset: 0; z-index: 999;
+  background: var(--a-login-bg);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s;
+}
+
+#login-screen.hidden { display: none; }
+
+.login-box {
+  background: var(--a-card);
+  border: 1px solid var(--a-border);
+  border-radius: 24px;
+  padding: 2.75rem 2.5rem 2.5rem;
+  width: min(420px, 92vw);
+  box-shadow: 0 24px 60px var(--a-glow), 0 4px 16px rgba(0,0,0,0.1);
+  animation: loginIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes loginIn {
+  from { opacity:0; transform:translateY(24px) scale(0.97); }
+  to   { opacity:1; transform:none; }
+}
+
+.login-logo { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.75rem; }
+
+.login-logo-icon {
+  width:48px; height:48px; background:var(--a-primary);
+  border-radius:14px; display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; box-shadow:0 4px 16px var(--a-glow);
+}
+
+.login-logo-text { font-size:1.2rem; font-weight:700; color:var(--a-text); line-height:1.2; }
+.login-logo-text span { color:var(--a-primary); }
+.login-logo-sub {
+  font-size:0.72rem; font-weight:600; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--a-text3); margin-top:0.15rem;
+}
+
+.login-title { font-size:1.5rem; font-weight:700; color:var(--a-text); margin-bottom:0.35rem; letter-spacing:-0.02em; }
+.login-sub { font-size:0.875rem; color:var(--a-text2); margin-bottom:1.75rem; }
+.login-field { margin-bottom:1rem; }
+
+.login-label {
+  display:block; font-size:0.8rem; font-weight:600;
+  color:var(--a-text2); margin-bottom:0.35rem;
+}
+
+.login-input {
+  width:100%; padding:0.7rem 1rem;
+  background:var(--a-bg); border:1.5px solid var(--a-border);
+  border-radius:10px; font-family:var(--font); font-size:0.9rem;
+  color:var(--a-text); outline:none; transition:all var(--transition);
+}
+
+.login-input:focus { border-color:var(--a-primary); box-shadow:0 0 0 3px var(--a-primary-dim); }
+
+.login-input.shake { animation:shake 0.4s ease; border-color:#EF4444; }
+
+@keyframes shake {
+  0%,100% { transform:translateX(0); }
+  20%     { transform:translateX(-6px); }
+  40%     { transform:translateX(6px); }
+  60%     { transform:translateX(-4px); }
+  80%     { transform:translateX(4px); }
+}
+
+.login-error { display:none; font-size:0.8rem; color:#EF4444; margin-top:0.4rem; font-weight:500; }
+.login-error.show { display:block; }
+
+.login-btn {
+  width:100%; padding:0.85rem; background:var(--a-primary); color:#fff;
+  border:none; border-radius:10px; font-family:var(--font); font-size:0.95rem;
+  font-weight:700; cursor:pointer; margin-top:0.5rem;
+  transition:all var(--transition); box-shadow:0 4px 16px var(--a-glow);
+}
+
+.login-btn:hover { background:var(--a-primary-dark); transform:translateY(-1px); }
+
+.login-hint { text-align:center; font-size:0.75rem; color:var(--a-text3); margin-top:1.25rem; }
+
+/* ══════════════════════════════════════════════════════════
+   ADMIN APP
+   ══════════════════════════════════════════════════════════ */
+#admin-app { display:none; }
+#admin-app.visible { display:block; }
+
+/* ── Topbar ── */
+.topbar {
+  background: var(--a-topbar);
+  border-bottom: 1px solid var(--a-border);
+  padding: 0 1.5rem 0 2rem; height: 64px;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:50;
+  box-shadow: var(--a-shadow);
+  transition: background 0.3s, border-color 0.3s;
+  backdrop-filter: blur(16px);
+}
+
+.topbar-brand { display:flex; align-items:center; gap:0.75rem; }
+
+.topbar-logo {
+  width:34px; height:34px; background:var(--a-primary);
+  border-radius:9px; display:flex; align-items:center; justify-content:center;
+  font-size:1rem; box-shadow:0 2px 8px var(--a-glow);
+}
+
+.topbar-title { font-size:0.9375rem; font-weight:700; color:var(--a-text); }
+.topbar-title span { color:var(--a-primary); }
+.topbar-right { display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; }
+
+/* ── Theme switcher ── */
+.theme-switcher {
+  display:flex; align-items:center; gap:0.4rem;
+  background:var(--a-bg2); border:1px solid var(--a-border);
+  border-radius:100px; padding:0.3rem 0.6rem;
+}
+
+.theme-label {
+  font-size:0.68rem; font-weight:700; color:var(--a-text3);
+  letter-spacing:0.07em; text-transform:uppercase; padding-right:0.2rem;
+}
+
+.theme-btn {
+  width:26px; height:26px; border-radius:50%;
+  border:2.5px solid transparent; cursor:pointer;
+  transition:all 0.18s ease; flex-shrink:0;
+  position:relative;
+}
+
+.theme-btn:hover { transform:scale(1.2); }
+.theme-btn.active { border-color:var(--a-text); transform:scale(1.18); }
+.theme-btn[data-t="ocean"]    { background:linear-gradient(135deg,#0EA5E9,#38BDF8); }
+.theme-btn[data-t="blaze"]    { background:linear-gradient(135deg,#1a1a1a,#F97316); }
+.theme-btn[data-t="emerald"]  { background:linear-gradient(135deg,#10B981,#6EE7B7); }
+.theme-btn[data-t="midnight"] { background:linear-gradient(135deg,#1E1B4B,#8B5CF6); }
+.theme-btn[data-t="rose"]     { background:linear-gradient(135deg,#F43F5E,#FDA4AF); }
+
+/* Tooltip on hover */
+.theme-btn::after {
+  content: attr(title);
+  display:none; position:absolute;
+  bottom:calc(100% + 6px); left:50%; transform:translateX(-50%);
+  background:var(--a-text); color:var(--a-card);
+  font-size:0.62rem; font-weight:600; white-space:nowrap;
+  padding:0.2rem 0.5rem; border-radius:5px; pointer-events:none;
+}
+
+.theme-btn:hover::after { display:block; }
+
+/* ── Buttons ── */
+.btn {
+  font-family:var(--font); font-size:0.8rem; font-weight:600;
+  padding:0.42rem 0.9rem; border-radius:8px;
+  border:1.5px solid var(--a-border);
+  background:var(--a-card); color:var(--a-text2);
+  cursor:pointer; transition:all 0.18s ease; white-space:nowrap;
+  text-decoration:none; display:inline-flex; align-items:center;
+}
+
+.btn:hover { border-color:var(--a-primary); color:var(--a-primary); }
+.btn-primary { background:var(--a-primary); border-color:var(--a-primary); color:#fff; }
+.btn-primary:hover { background:var(--a-primary-dark); border-color:var(--a-primary-dark); color:#fff; }
+.btn-danger { border-color:rgba(239,68,68,0.3); color:#EF4444; }
+.btn-danger:hover { background:rgba(239,68,68,0.08); border-color:#EF4444; }
+
+.badge-live {
+  display:flex; align-items:center; gap:0.4rem;
+  font-size:0.72rem; font-weight:600; color:#10B981;
+  background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2);
+  padding:0.28rem 0.7rem; border-radius:100px;
+}
+
+.badge-live::before {
+  content:''; width:6px; height:6px; background:#10B981;
+  border-radius:50%; animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── Layout ── */
+.layout { display:flex; min-height:calc(100vh - 64px); }
+
+.sidebar {
+  width:215px; background:var(--a-sidebar);
+  border-right:1px solid var(--a-border);
+  padding:1.25rem 0.875rem;
+  display:flex; flex-direction:column; gap:0.2rem; flex-shrink:0;
+  transition:background 0.3s, border-color 0.3s;
+}
+
+.sidebar-label {
+  font-size:0.65rem; font-weight:700; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--a-text3);
+  padding:0.6rem 0.75rem 0.2rem; margin-top:0.4rem;
+}
+
+.sidebar-link {
+  display:flex; align-items:center; gap:0.6rem;
+  padding:0.58rem 0.75rem; border-radius:9px;
+  font-size:0.875rem; font-weight:500; color:var(--a-text2);
+  cursor:pointer; transition:all 0.15s; border:none;
+  background:none; width:100%; text-align:left;
+}
+
+.sidebar-link:hover { background:var(--a-primary-dim); color:var(--a-primary); }
+.sidebar-link.active { background:var(--a-primary-dim); color:var(--a-primary); font-weight:600; }
+.sidebar-icon { font-size:0.95rem; width:20px; text-align:center; }
+
+.sidebar-footer { margin-top:auto; padding-top:1rem; border-top:1px solid var(--a-border); }
+
+.sidebar-user { display:flex; align-items:center; gap:0.6rem; padding:0.6rem 0.75rem; }
+
+.sidebar-avatar {
+  width:30px; height:30px; border-radius:50%;
+  background:var(--a-primary); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; font-weight:700; flex-shrink:0;
+}
+
+.sidebar-username { font-size:0.8125rem; font-weight:600; color:var(--a-text); }
+.sidebar-role { font-size:0.7rem; color:var(--a-text3); }
+
+/* ── Main content ── */
+.main {
+  flex:1; padding:1.75rem 2rem; overflow:auto;
+  background:var(--a-bg); transition:background 0.3s;
+}
+
+.page { display:none; }
+.page.active { display:block; }
+
+.page-header { margin-bottom:1.75rem; }
+.page-title { font-size:1.4rem; font-weight:700; color:var(--a-text); letter-spacing:-0.02em; }
+.page-subtitle { font-size:0.875rem; color:var(--a-text2); margin-top:0.2rem; }
+
+/* ── Stat cards ── */
+.stat-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr));
+  gap:1rem; margin-bottom:1.75rem;
+}
+
+.stat-card {
+  background:var(--a-card); border:1px solid var(--a-border);
+  border-radius:var(--radius); padding:1.25rem 1.4rem;
+  box-shadow:var(--a-shadow); position:relative; overflow:hidden;
+  transition:background 0.3s, border-color 0.3s;
+}
+
+.stat-card::before {
+  content:''; position:absolute; top:0; left:0; right:0;
+  height:3px; background:var(--stat-color, var(--a-primary));
+}
+
+.stat-label {
+  font-size:0.72rem; font-weight:700; letter-spacing:0.07em;
+  text-transform:uppercase; color:var(--a-text3); margin-bottom:0.5rem;
+}
+
+.stat-value { font-size:1.9rem; font-weight:700; color:var(--a-text); line-height:1; letter-spacing:-0.02em; }
+.stat-sub { font-size:0.72rem; color:var(--a-text3); margin-top:0.3rem; }
+.stat-icon { position:absolute; top:1rem; right:1rem; font-size:1.4rem; opacity:0.12; }
+
+/* ── Chart grid ── */
+.chart-grid { display:grid; grid-template-columns:2fr 1fr; gap:1rem; margin-bottom:1rem; }
+
+.card {
+  background:var(--a-card); border:1px solid var(--a-border);
+  border-radius:var(--radius); padding:1.4rem;
+  box-shadow:var(--a-shadow); transition:background 0.3s, border-color 0.3s;
+}
+
+.card-title {
+  font-size:0.875rem; font-weight:700; color:var(--a-text);
+  margin-bottom:1.25rem; display:flex; align-items:center; justify-content:space-between;
+}
+
+.card-badge {
+  font-size:0.68rem; font-weight:700; padding:0.2rem 0.6rem;
+  border-radius:100px; background:var(--a-primary-dim); color:var(--a-primary);
+}
+
+/* ── Bar chart ── */
+.bar-chart { display:flex; align-items:flex-end; gap:5px; height:140px; }
+
+.bar-col {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; gap:4px; height:100%; justify-content:flex-end;
+}
+
+.bar {
+  width:100%; background:var(--a-primary);
+  border-radius:4px 4px 0 0; min-height:2px;
+  position:relative; transition:opacity 0.2s; opacity:0.85;
+}
+
+.bar:hover { opacity:1; }
+
+.bar-tooltip {
+  display:none; position:absolute;
+  bottom:calc(100% + 5px); left:50%; transform:translateX(-50%);
+  background:var(--a-text); color:var(--a-card);
+  font-size:0.68rem; font-weight:600;
+  padding:0.22rem 0.5rem; border-radius:5px;
+  white-space:nowrap; pointer-events:none; z-index:10;
+}
+
+.bar:hover .bar-tooltip { display:block; }
+.bar-label { font-size:0.58rem; color:var(--a-text3); text-align:center; white-space:nowrap; overflow:hidden; max-width:100%; }
+
+/* ── Donut ── */
+.donut-wrap { display:flex; flex-direction:column; align-items:center; gap:1rem; }
+.donut-legend { width:100%; display:flex; flex-direction:column; gap:0.5rem; }
+.legend-item { display:flex; align-items:center; justify-content:space-between; font-size:0.8rem; }
+.legend-left { display:flex; align-items:center; gap:0.5rem; color:var(--a-text2); }
+.legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.legend-count { font-weight:700; color:var(--a-text); }
+
+/* ── Table ── */
+.data-table { width:100%; border-collapse:collapse; }
+
+.data-table th {
+  text-align:left; font-size:0.7rem; font-weight:700;
+  letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--a-text3); padding:0 0 0.75rem;
+  border-bottom:1px solid var(--a-border);
+}
+
+.data-table td {
+  padding:0.72rem 0; font-size:0.875rem; color:var(--a-text2);
+  border-bottom:1px solid var(--a-border);
+}
+
+.data-table tr:last-child td { border-bottom:none; }
+.data-table td:last-child { text-align:right; font-weight:700; color:var(--a-text); }
+
+.rank-badge {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:21px; height:21px; border-radius:50%;
+  background:var(--a-primary-dim); color:var(--a-primary);
+  font-size:0.68rem; font-weight:700; margin-right:0.4rem;
+}
+
+.bar-inline {
+  display:inline-block; height:6px; background:var(--a-primary);
+  border-radius:3px; opacity:0.22; vertical-align:middle; margin-right:0.5rem;
+}
+
+/* ── Section bars ── */
+.section-bars { display:flex; flex-direction:column; gap:0.75rem; }
+.section-bar-row { display:flex; flex-direction:column; gap:0.25rem; }
+.section-bar-label { display:flex; justify-content:space-between; font-size:0.8rem; color:var(--a-text2); font-weight:500; }
+.section-bar-track { height:8px; background:var(--a-bar-bg); border-radius:4px; overflow:hidden; }
+.section-bar-fill { height:100%; background:var(--a-primary); border-radius:4px; transition:width 0.6s ease; }
+
+/* ── Role cards ── */
+.role-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; }
+
+.role-card {
+  background:var(--a-bg2); border:1px solid var(--a-border);
+  border-radius:10px; padding:1rem; text-align:center; transition:background 0.3s;
+}
+
+.role-icon { font-size:1.6rem; margin-bottom:0.35rem; }
+.role-name { font-size:0.7rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--a-text2); margin-bottom:0.25rem; }
+.role-count { font-size:1.4rem; font-weight:700; color:var(--a-text); }
+
+/* ── Empty states ── */
+.empty-state { text-align:center; padding:2.5rem 1rem; color:var(--a-text3); }
+.empty-state-icon { font-size:2rem; margin-bottom:0.75rem; }
+.empty-state p { font-size:0.875rem; }
+
+.last-updated { font-size:0.72rem; color:var(--a-text3); margin-top:1.5rem; text-align:right; }
+
+/* ── Responsive ── */
+@media (max-width:768px) {
+  .sidebar { display:none; }
+  .chart-grid { grid-template-columns:1fr; }
+  .stat-grid { grid-template-columns:1fr 1fr; }
+  .topbar-right .btn-danger, .topbar-right .btn:not(.btn-primary):not(#site-btn) { display:none; }
+  .theme-label { display:none; }
+}
+
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     LOGIN SCREEN
+     ══════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">🏠</div>
+      <div>
+        <div class="login-logo-text">Harvin <span>Properties</span></div>
+        <div class="login-logo-sub">Admin Portal</div>
+      </div>
+    </div>
+    <div class="login-title">Welcome back</div>
+    <div class="login-sub">Sign in to access the analytics dashboard</div>
+    <div class="login-field">
+      <label class="login-label" for="login-user">Username</label>
+      <input id="login-user" class="login-input" type="text" placeholder="admin" autocomplete="username" />
+    </div>
+    <div class="login-field">
+      <label class="login-label" for="login-pass">Password</label>
+      <input id="login-pass" class="login-input" type="password" placeholder="••••••••" autocomplete="current-password" />
+      <div class="login-error" id="login-error">Incorrect username or password. Please try again.</div>
+    </div>
+    <button class="login-btn" onclick="attemptLogin()">Sign In →</button>
+    <div class="login-hint">Protected area · Harvin Properties Inc.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN APP
+     ══════════════════════════════════════════════════════════ -->
+<div id="admin-app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">🏠</div>
+      <div class="topbar-title">Harvin <span>Properties</span> — Analytics</div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="badge-live">Live</div>
+
+      <!-- Theme switcher — changes HOME PAGE theme via ThemeManager -->
+      <div class="theme-switcher">
+        <span class="theme-label">Site Theme</span>
+        <button class="theme-btn" data-t="ocean"    title="Ocean (Blue)"          onclick="adminSetTheme('ocean',this)"></button>
+        <button class="theme-btn" data-t="blaze"    title="Blaze (Black & Orange)" onclick="adminSetTheme('blaze',this)"></button>
+        <button class="theme-btn" data-t="emerald"  title="Emerald (Green)"        onclick="adminSetTheme('emerald',this)"></button>
+        <button class="theme-btn" data-t="midnight" title="Midnight (Purple)"      onclick="adminSetTheme('midnight',this)"></button>
+        <button class="theme-btn" data-t="rose"     title="Rose (Pink)"            onclick="adminSetTheme('rose',this)"></button>
+      </div>
+
+      <button class="btn btn-primary" onclick="refreshData()">↻ Refresh</button>
+      <a id="site-btn" href="../index.html" class="btn">← View Site</a>
+      <button class="btn btn-danger" onclick="confirmClear()">Clear Data</button>
+      <button class="btn" onclick="logout()">⎋ Logout</button>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <span class="sidebar-label">Overview</span>
+      <button class="sidebar-link active" onclick="showPage('overview',this)">
+        <span class="sidebar-icon">📊</span> Dashboard
+      </button>
+      <button class="sidebar-link" onclick="showPage('traffic',this)">
+        <span class="sidebar-icon">📈</span> Traffic
+      </button>
+      <span class="sidebar-label">Engagement</span>
+      <button class="sidebar-link" onclick="showPage('clicks',this)">
+        <span class="sidebar-icon">🖱️</span> Clicks
+      </button>
+      <button class="sidebar-link" onclick="showPage('sections',this)">
+        <span class="sidebar-icon">👁️</span> Section Views
+      </button>
+      <span class="sidebar-label">Users</span>
+      <button class="sidebar-link" onclick="showPage('auth',this)">
+        <span class="sidebar-icon">👥</span> Auth & Roles
+      </button>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">A</div>
+          <div>
+            <div class="sidebar-username">admin</div>
+            <div class="sidebar-role">Administrator</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+      <!-- OVERVIEW -->
+      <div class="page active" id="page-overview">
+        <div class="page-header">
+          <div class="page-title">Dashboard Overview</div>
+          <div class="page-subtitle">All-time metrics from visitor interactions on Harvin Properties</div>
+        </div>
+        <div class="stat-grid" id="overview-stats"></div>
+        <div class="chart-grid">
+          <div class="card">
+            <div class="card-title">
+              Page Views — Last 14 Days
+              <span class="card-badge" id="today-views-badge">Today: 0</span>
+            </div>
+            <div class="bar-chart" id="views-chart"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Role Interest</div>
+            <div class="role-grid" id="role-grid"></div>
+          </div>
+        </div>
+        <div class="chart-grid" style="margin-top:1rem;">
+          <div class="card">
+            <div class="card-title">Top Clicked Items</div>
+            <table class="data-table" id="top-clicks-table">
+              <thead><tr><th>#</th><th>Label</th><th>Clicks</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-title">Section Engagement</div>
+            <div class="section-bars" id="section-bars"></div>
+          </div>
+        </div>
+        <div class="last-updated" id="last-updated"></div>
+      </div>
+
+      <!-- TRAFFIC -->
+      <div class="page" id="page-traffic">
+        <div class="page-header">
+          <div class="page-title">Traffic</div>
+          <div class="page-subtitle">Daily page views and unique sessions</div>
+        </div>
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-title">Daily Page Views (Last 14 Days)</div>
+          <div class="bar-chart" id="traffic-chart" style="height:180px;"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Daily Breakdown</div>
+          <table class="data-table" id="traffic-table">
+            <thead><tr><th>Date</th><th>Page Views</th><th>Unique Sessions</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CLICKS -->
+      <div class="page" id="page-clicks">
+        <div class="page-header">
+          <div class="page-title">Click Tracking</div>
+          <div class="page-subtitle">What visitors are clicking across the site</div>
+        </div>
+        <div class="chart-grid" style="margin-bottom:1rem;">
+          <div class="card">
+            <div class="card-title">Top Clicks</div>
+            <table class="data-table" id="clicks-table">
+              <thead><tr><th>#</th><th>Label</th><th>Category</th><th>Count</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-title">Clicks by Category</div>
+            <div id="category-donut"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIONS -->
+      <div class="page" id="page-sections">
+        <div class="page-header">
+          <div class="page-title">Section Views</div>
+          <div class="page-subtitle">How far visitors scroll through the page</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Section Engagement</div>
+          <div class="section-bars" id="section-bars-full"></div>
+        </div>
+      </div>
+
+      <!-- AUTH -->
+      <div class="page" id="page-auth">
+        <div class="page-header">
+          <div class="page-title">Auth & Role Interest</div>
+          <div class="page-subtitle">Login attempts, registrations and role engagement</div>
+        </div>
+        <div class="stat-grid" id="auth-stats"></div>
+        <div class="chart-grid">
+          <div class="card">
+            <div class="card-title">Role Interest Breakdown</div>
+            <div class="role-grid" id="auth-role-grid"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Login vs Registration</div>
+            <div id="auth-donut"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCRIPTS  (theme.js already loaded in <head>)
+     ══════════════════════════════════════════════════════════ -->
+<script src="../js/analytics.js"></script>
+<script>
+
+/* ── CREDENTIALS ────────────────────────────────────────── */
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin';
+const SESSION_KEY = 'hp_admin_auth';
+
+/* ── LOGIN ──────────────────────────────────────────────── */
+function attemptLogin() {
+  const u  = document.getElementById('login-user').value.trim();
+  const p  = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  const ui  = document.getElementById('login-user');
+  const pi  = document.getElementById('login-pass');
+
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    err.classList.remove('show');
+    showApp();
+  } else {
+    err.classList.add('show');
+    ui.classList.add('shake'); pi.classList.add('shake');
+    setTimeout(() => { ui.classList.remove('shake'); pi.classList.remove('shake'); }, 500);
+    pi.value = '';
+  }
+}
+
+function showApp() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('admin-app').classList.add('visible');
+
+  // Sync theme buttons to current saved theme
+  const current = ThemeManager.load();
+  syncThemeButtons(current);
+
+  renderPage('overview');
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('admin-app').classList.remove('visible');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !document.getElementById('login-screen').classList.contains('hidden'))
+    attemptLogin();
+});
+
+if (sessionStorage.getItem(SESSION_KEY) === '1') showApp();
+
+/* ── THEME ──────────────────────────────────────────────── */
+// adminSetTheme: saves the theme for the homepage AND updates admin UI colours
+function adminSetTheme(name, btn) {
+  // Save to localStorage so homepage picks it up
+  ThemeManager.set(name);
+  syncThemeButtons(name);
+  // Re-render current chart page so colours update
+  const activePage = document.querySelector('.sidebar-link.active');
+  if (activePage) {
+    const m = activePage.getAttribute('onclick').match(/'(\w+)'/);
+    if (m) renderPage(m[1]);
+  }
+}
+
+function syncThemeButtons(name) {
+  document.querySelectorAll('.theme-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.t === name);
+  });
+}
+
+/* ── NAVIGATION ─────────────────────────────────────────── */
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  btn.classList.add('active');
+  renderPage(name);
+}
+
+function refreshData() {
+  const active = document.querySelector('.sidebar-link.active');
+  const m = active ? active.getAttribute('onclick').match(/'(\w+)'/) : null;
+  renderPage(m ? m[1] : 'overview');
+}
+
+/* ── HELPERS ────────────────────────────────────────────── */
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+
+function getPrimary() {
+  // Read the live --blue value (set by ThemeManager)
+  return getComputedStyle(document.documentElement).getPropertyValue('--blue').trim() || '#0EA5E9';
+}
+
+function getDonutTrack() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--bg-subtle').trim() || '#E2EDFF';
+}
+
+function getTextColor() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#0F172A';
+}
+
+function getCardColor() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim() || '#FFFFFF';
+}
+
+function makeBarChart(containerId, items, maxH = 140) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const max = Math.max(...items.map(i => i.value), 1);
+  const primary = getPrimary();
+  el.innerHTML = items.map(item => {
+    const pct = Math.max((item.value / max) * (maxH - 24), 2);
+    return `<div class="bar-col">
+      <div class="bar" style="height:${pct}px;background:${primary};">
+        <div class="bar-tooltip">${item.label}: ${item.value}</div>
+      </div>
+      <div class="bar-label">${item.shortLabel || item.label}</div>
+    </div>`;
+  }).join('');
+}
+
+function makeSectionBars(containerId, sectionViews) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!sectionViews.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👁️</div><p>No section data yet. Visit the site first.</p></div>`;
+    return;
+  }
+  const mx = Math.max(...sectionViews.map(s => s.count), 1);
+  el.innerHTML = sectionViews.map(s => `
+    <div class="section-bar-row">
+      <div class="section-bar-label"><span>${s.section}</span><span>${s.count} views</span></div>
+      <div class="section-bar-track">
+        <div class="section-bar-fill" style="width:${(s.count/mx)*100}%"></div>
+      </div>
+    </div>`).join('');
+}
+
+function makeDonut(containerId, segments) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const total = segments.reduce((s,x) => s + x.value, 0);
+  if (!total) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🥧</div><p>No data yet.</p></div>`;
+    return;
+  }
+  const primary = getPrimary();
+  const colors = [primary, '#F59E0B','#10B981','#EF4444','#8B5CF6','#F97316','#06B6D4'];
+  const track   = getDonutTrack();
+  const textCol = getTextColor();
+  let cum = 0;
+  const r=50, cx=68, cy=68, sw=16, C=2*Math.PI*r;
+
+  const arcs = segments.map((seg,i) => {
+    const frac=seg.value/total, dash=frac*C, gap=C-dash;
+    const offset=C-cum*C;
+    cum+=frac;
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
+      stroke="${colors[i%colors.length]}" stroke-width="${sw}"
+      stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${offset}"
+      transform="rotate(-90 ${cx} ${cy})"/>`;
+  }).join('');
+
+  const legend = segments.map((seg,i) => `
+    <div class="legend-item">
+      <div class="legend-left">
+        <div class="legend-dot" style="background:${colors[i%colors.length]}"></div>
+        <span>${seg.label}</span>
+      </div>
+      <span class="legend-count">${seg.value}</span>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="donut-wrap">
+      <svg width="136" height="136">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${track}" stroke-width="${sw}"/>
+        ${arcs}
+        <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+          font-size="16" font-weight="700" fill="${textCol}">${total}</text>
+      </svg>
+      <div class="donut-legend">${legend}</div>
+    </div>`;
+}
+
+/* ── RENDER PAGES ───────────────────────────────────────── */
+function renderPage(name) {
+  const r = Analytics.getReport();
+  if      (name==='overview') renderOverview(r);
+  else if (name==='traffic')  renderTraffic(r);
+  else if (name==='clicks')   renderClicks(r);
+  else if (name==='sections') renderSections(r);
+  else if (name==='auth')     renderAuth(r);
+}
+
+function renderOverview(r) {
+  document.getElementById('overview-stats').innerHTML = `
+    <div class="stat-card" style="--stat-color:var(--a-primary)">
+      <div class="stat-icon">👁️</div><div class="stat-label">Total Page Views</div>
+      <div class="stat-value">${r.totalViews.toLocaleString()}</div><div class="stat-sub">All time</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#10B981">
+      <div class="stat-icon">🧑</div><div class="stat-label">Unique Sessions</div>
+      <div class="stat-value">${r.uniqueSessions.toLocaleString()}</div><div class="stat-sub">Estimated visitors</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#F59E0B">
+      <div class="stat-icon">🖱️</div><div class="stat-label">Total Clicks</div>
+      <div class="stat-value">${r.totalClicks.toLocaleString()}</div><div class="stat-sub">All interactions</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#8B5CF6">
+      <div class="stat-icon">🔐</div><div class="stat-label">Login Attempts</div>
+      <div class="stat-value">${r.totalLogins.toLocaleString()}</div><div class="stat-sub">Sign-in clicks</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#EF4444">
+      <div class="stat-icon">📝</div><div class="stat-label">Registrations</div>
+      <div class="stat-value">${r.totalRegs.toLocaleString()}</div><div class="stat-sub">Register clicks</div>
+    </div>`;
+
+  const today = r.dailyViews[r.dailyViews.length-1];
+  document.getElementById('today-views-badge').textContent = `Today: ${today?.count||0}`;
+  makeBarChart('views-chart', r.dailyViews.map(d=>({label:fmtDate(d.date),shortLabel:d.date.slice(5),value:d.count})));
+
+  const roleIcons={tenant:'🏠',landlord:'🏢',manager:'📋'};
+  document.getElementById('role-grid').innerHTML=Object.entries(r.roleInterest).map(([role,count])=>`
+    <div class="role-card">
+      <div class="role-icon">${roleIcons[role]}</div>
+      <div class="role-name">${role}</div>
+      <div class="role-count">${count}</div>
+    </div>`).join('');
+
+  const tbody=document.querySelector('#top-clicks-table tbody');
+  if(!r.topClicks.length){
+    tbody.innerHTML=`<tr><td colspan="3"><div class="empty-state"><div class="empty-state-icon">🖱️</div><p>No clicks yet.</p></div></td></tr>`;
+  } else {
+    tbody.innerHTML=r.topClicks.map((c,i)=>`
+      <tr>
+        <td><span class="rank-badge">${i+1}</span></td>
+        <td>${c.label}</td>
+        <td><span class="bar-inline" style="width:${Math.max(c.count/r.topClicks[0].count*80,8)}px"></span>${c.count}</td>
+      </tr>`).join('');
+  }
+  makeSectionBars('section-bars', r.sectionViews);
+  document.getElementById('last-updated').textContent='Last updated: '+new Date().toLocaleTimeString();
+}
+
+function renderTraffic(r) {
+  makeBarChart('traffic-chart',r.dailyViews.map(d=>({label:fmtDate(d.date),shortLabel:d.date.slice(5),value:d.count})),180);
+  document.querySelector('#traffic-table tbody').innerHTML=[...r.dailyViews].reverse().map(d=>`
+    <tr><td>${fmtDate(d.date)}</td><td>${d.count}</td><td>${d.sessions}</td></tr>`).join('');
+}
+
+function renderClicks(r) {
+  const tbody=document.querySelector('#clicks-table tbody');
+  const catColors={navigation:'#0EA5E9',auth:'#10B981',modal:'#F59E0B',footer:'#8B5CF6',social:'#EF4444',general:'#94A3B8'};
+  if(!r.topClicks.length){
+    tbody.innerHTML=`<tr><td colspan="4"><div class="empty-state"><div class="empty-state-icon">🖱️</div><p>No click data yet.</p></div></td></tr>`;
+  } else {
+    tbody.innerHTML=r.topClicks.map((c,i)=>{
+      const cat=r.raw.clicks.find(x=>x.label===c.label)?.category||'general';
+      const cc=catColors[cat]||'#94A3B8';
+      return `<tr>
+        <td><span class="rank-badge">${i+1}</span></td>
+        <td>${c.label}</td>
+        <td><span style="background:${cc}22;color:${cc};padding:0.12rem 0.5rem;border-radius:100px;font-size:0.68rem;font-weight:700;">${cat}</span></td>
+        <td>${c.count}</td>
+      </tr>`;
+    }).join('');
+  }
+  makeDonut('category-donut',Object.entries(r.clicksByCategory).map(([k,v])=>({label:k,value:v})));
+}
+
+function renderSections(r) { makeSectionBars('section-bars-full',r.sectionViews); }
+
+function renderAuth(r) {
+  document.getElementById('auth-stats').innerHTML=`
+    <div class="stat-card" style="--stat-color:#8B5CF6">
+      <div class="stat-icon">🔐</div><div class="stat-label">Login Clicks</div><div class="stat-value">${r.totalLogins}</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#10B981">
+      <div class="stat-icon">📝</div><div class="stat-label">Register Clicks</div><div class="stat-value">${r.totalRegs}</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#F59E0B">
+      <div class="stat-icon">🏆</div><div class="stat-label">Top Role</div>
+      <div class="stat-value" style="font-size:1.2rem;">${Object.entries(r.roleInterest).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—'}</div>
+    </div>`;
+
+  const roleIcons={tenant:'🏠',landlord:'🏢',manager:'📋'};
+  document.getElementById('auth-role-grid').innerHTML=Object.entries(r.roleInterest).map(([role,count])=>`
+    <div class="role-card">
+      <div class="role-icon">${roleIcons[role]}</div>
+      <div class="role-name">${role}</div>
+      <div class="role-count">${count}</div>
+    </div>`).join('');
+
+  makeDonut('auth-donut',[
+    {label:'Login Clicks',value:r.totalLogins},
+    {label:'Register Clicks',value:r.totalRegs},
+  ]);
+}
+
+/* ── CLEAR ──────────────────────────────────────────────── */
+function confirmClear() {
+  if(confirm('Clear ALL analytics data? This cannot be undone.')) {
+    Analytics.clearData();
+    renderPage('overview');
+  }
+}
+
+</script>
+</body>
+</html>
