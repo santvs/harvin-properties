@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Harvin Properties — Buy, Sell, Rent or Manage. Your full-service real estate platform in the Pacific Northwest." />
+  <title>Harvin Properties — Buy, Sell & Rent</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='10' fill='%230EA5E9'/><path d='M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z' fill='white'/></svg>" />
+  <script src="js/theme.js"></script>
+  <script>ThemeManager.init();</script>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+  /* ══════════════════════════════════════════════════════════
+     INDEX4 — TWO SIDE-BY-SIDE HERO CARDS
+     ══════════════════════════════════════════════════════════ */
+
+  /* Override hero content to be wider for side-by-side */
+  #hero .hero-content {
+    max-width: 1100px !important;
+  }
+
+  .hero-cards-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeUp 0.7s 0.26s ease both;
+  }
+
+  /* Each service card */
+  .service-card {
+    border-radius: var(--radius-xl);
+    padding: 2rem 1.75rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .service-card.rent-card {
+    background: var(--bg-card);
+    border-color: var(--blue);
+    box-shadow: 0 8px 32px color-mix(in srgb, var(--blue) 15%, transparent);
+  }
+
+  .service-card.buy-card {
+    background: var(--bg-card);
+    border-color: #8B5CF6;
+    box-shadow: 0 8px 32px rgba(139,92,246,0.15);
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+  }
+
+  .service-card.rent-card:hover {
+    box-shadow: 0 20px 50px color-mix(in srgb, var(--blue) 25%, transparent);
+  }
+
+  .service-card.buy-card:hover {
+    box-shadow: 0 20px 50px rgba(139,92,246,0.28);
+  }
+
+  /* Card header */
+  .sc-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 0.3rem 0.8rem;
+    border-radius: 100px; margin-bottom: 1.25rem;
+  }
+  .sc-badge.blue { background: var(--blue-dim); color: var(--blue); border: 1px solid color-mix(in srgb, var(--blue) 25%, transparent); }
+  .sc-badge.purple { background: rgba(139,92,246,0.1); color: #8B5CF6; border: 1px solid rgba(139,92,246,0.25); }
+
+  .sc-icon { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+
+  .sc-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.15;
+    transition: color 0.35s;
+  }
+
+  .sc-desc {
+    font-size: 0.875rem; color: var(--text-secondary);
+    line-height: 1.65; margin-bottom: 1.5rem;
+    transition: color 0.35s;
+  }
+
+  /* Mini role pills inside each card */
+  .sc-roles {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem;
+  }
+  .sc-role-pill {
+    display: flex; align-items: center; gap: 0.3rem;
+    font-size: 0.72rem; font-weight: 600;
+    padding: 0.3rem 0.7rem; border-radius: 100px;
+    border: 1.5px solid var(--border-strong);
+    background: var(--bg-subtle); color: var(--text-secondary);
+    transition: all 0.2s ease; cursor: pointer;
+  }
+  .sc-role-pill:hover { border-color: var(--pill-color); color: var(--pill-color); background: color-mix(in srgb, var(--pill-color) 8%, var(--bg-card)); }
+  .sc-role-pill.active { border-color: var(--pill-color); color: var(--pill-color); background: color-mix(in srgb, var(--pill-color) 10%, var(--bg-card)); }
+
+  /* CTA buttons inside cards */
+  .sc-btns { display: flex; flex-direction: column; gap: 0.6rem; }
+  .sc-btn {
+    display: block; width: 100%; padding: 0.75rem 1rem;
+    border-radius: var(--radius-md); font-family: var(--font-body);
+    font-size: 0.875rem; font-weight: 700; text-align: center;
+    cursor: pointer; transition: all var(--transition); border: none;
+    text-decoration: none;
+  }
+  .sc-btn.primary-blue   { background: var(--blue); color: #fff; box-shadow: 0 4px 16px var(--blue-dim); }
+  .sc-btn.primary-blue:hover   { background: var(--blue-dark); transform: translateY(-1px); }
+  .sc-btn.primary-purple { background: #8B5CF6; color: #fff; box-shadow: 0 4px 16px rgba(139,92,246,0.3); }
+  .sc-btn.primary-purple:hover { background: #7C3AED; transform: translateY(-1px); }
+  .sc-btn.outline-blue   { background: transparent; color: var(--blue); border: 2px solid var(--border-strong); }
+  .sc-btn.outline-blue:hover   { border-color: var(--blue); background: var(--blue-dim); }
+  .sc-btn.outline-purple { background: transparent; color: #8B5CF6; border: 2px solid var(--border-strong); }
+  .sc-btn.outline-purple:hover { border-color: #8B5CF6; background: rgba(139,92,246,0.08); }
+
+  /* Card divider */
+  .sc-divider {
+    display: flex; align-items: center; justify-content: center;
+    position: relative; margin: 0.5rem 0;
+  }
+  .sc-divider::before {
+    content: ''; position: absolute; top: 50%;
+    left: 0; right: 0; height: 1px; background: var(--border-strong);
+  }
+  .sc-divider span {
+    background: var(--bg-card); padding: 0 0.5rem;
+    font-size: 0.7rem; color: var(--text-muted); font-weight: 600;
+    position: relative; z-index: 1;
+  }
+
+  /* Stats per card */
+  .sc-stats {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    margin-top: 1.25rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--border-strong);
+  }
+  .sc-stat { flex: 1; min-width: 0; }
+  .sc-stat-num {
+    font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+    line-height: 1; transition: color 0.35s;
+  }
+  .sc-stat-lbl {
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted); margin-top: 0.15rem;
+  }
+
+  /* OR divider between cards */
+  .cards-or {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 0.5rem; padding: 0 0.25rem;
+    position: relative;
+  }
+  .cards-or::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 50%;
+    width: 1px; background: var(--border-strong); z-index: 0;
+  }
+  .cards-or-label {
+    background: var(--bg-card); border: 1.5px solid var(--border-strong);
+    color: var(--text-muted); font-size: 0.7rem; font-weight: 700;
+    padding: 0.4rem 0.6rem; border-radius: 100px; z-index: 1;
+    letter-spacing: 0.06em;
+  }
+
+  /* Unified stats bar below cards */
+  .unified-stats {
+    display: flex; align-items: center; justify-content: center;
+    gap: 2.5rem; flex-wrap: wrap; margin-top: 2rem;
+    animation: fadeUp 0.7s 0.5s ease both;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
+    color: var(--text-primary); line-height: 1; transition: color 0.35s;
+  }
+  .stat-num span { color: var(--blue); }
+  .stat-lbl {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-muted); margin-top: 0.2rem;
+  }
+  .stat-divider { width: 1px; height: 36px; background: var(--border-strong); }
+
+  /* ── Value Prop Section ── */
+  #value-prop { background: var(--bg); padding: 7rem 2rem; transition: background 0.35s; }
+  .vp-mode-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3.5rem; }
+  .vp-tab { padding: 0.6rem 1.8rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.9rem; font-weight: 700; border: 2px solid var(--border-strong); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; transition: all var(--transition); }
+  .vp-tab.active.rent { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 4px 16px var(--blue-dim); }
+  .vp-tab.active.buy  { background: #8B5CF6; color: #fff; border-color: #8B5CF6; box-shadow: 0 4px 16px rgba(139,92,246,0.25); }
+  .vp-tab:hover:not(.active) { border-color: var(--blue); color: var(--blue); }
+  .vp-panel { display: none; }
+  .vp-panel.active { display: block; }
+
+  /* Comparison table */
+  .comparison-wrap { max-width: 900px; margin: 0 auto 5rem; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card); transition: background 0.35s, border-color 0.35s; }
+  .comparison-header { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-bottom: 1px solid var(--border-strong); }
+  .comp-col-head { padding: 1.25rem 1.5rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
+  .comp-col-head:first-child { text-align: left; color: var(--text-muted); }
+  .comp-col-head.harvin { background: var(--blue-dim); color: var(--blue); border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong); position: relative; }
+  .comp-col-head.harvin.purple { background: rgba(139,92,246,0.08); color: #8B5CF6; }
+  .comp-col-head.harvin::before { content: '★ Best Value'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; padding: 0.2rem 0.7rem; border-radius: 100px; white-space: nowrap; }
+  .comp-col-head.harvin.purple::before { background: #8B5CF6; }
+  .comp-col-head.traditional { color: var(--text-secondary); }
+  .comparison-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-bottom: 1px solid var(--border); transition: background var(--transition); }
+  .comparison-row:last-child { border-bottom: none; }
+  .comparison-row:hover { background: var(--bg-subtle); }
+  .comp-cell { padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
+  .comp-cell:first-child { font-weight: 600; color: var(--text-primary); font-size: 0.8rem; }
+  .comp-cell.harvin-cell { background: color-mix(in srgb, var(--blue) 4%, transparent); color: var(--text-primary); font-weight: 600; border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong); justify-content: center; text-align: center; }
+  .comp-cell.harvin-cell.purple { background: rgba(139,92,246,0.04); }
+  .comp-cell.trad-cell { justify-content: center; text-align: center; }
+  .check { color: #10B981; } .cross { color: #EF4444; } .neutral { color: var(--text-muted); }
+
+  /* Pillar cards */
+  .pillars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.25rem; max-width: 1200px; margin: 0 auto; }
+  .pillar-card { background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 1.75rem; opacity: 0; transform: translateY(20px); transition: all 0.28s ease, opacity 0.55s ease, transform 0.55s ease; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+  .pillar-card.in-view { opacity: 1; transform: none; }
+  .pillar-card:hover { border-color: var(--pillar-color); transform: translateY(-4px); box-shadow: 0 12px 40px color-mix(in srgb, var(--pillar-color) 15%, transparent); }
+  .pillar-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--pillar-color); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+  .pillar-card:hover::after { transform: scaleX(1); }
+  .pillar-icon { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1rem; background: color-mix(in srgb, var(--pillar-color) 12%, var(--bg-card)); }
+  .pillar-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+  .pillar-desc { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.65; }
+  .pillar-tag { display: inline-block; margin-top: 1rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 100px; background: color-mix(in srgb, var(--pillar-color) 12%, transparent); color: var(--pillar-color); }
+
+  /* How It Works */
+  #how-it-works { background: var(--team-bg); padding: 7rem 2rem; transition: background 0.35s; }
+  .how-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+  .how-tab { padding: 0.6rem 1.4rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.875rem; font-weight: 600; border: 2px solid var(--border-strong); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; transition: all var(--transition); }
+  .how-tab.active { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 4px 16px var(--blue-dim); }
+  .how-tab:hover:not(.active) { border-color: var(--blue); color: var(--blue); }
+  .how-panel { display: none; }
+  .how-panel.active { display: block; }
+  .steps-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; max-width: 900px; margin: 0 auto; position: relative; }
+  .steps-grid::before { content: ''; position: absolute; top: 32px; left: 10%; right: 10%; height: 2px; background: linear-gradient(to right, var(--blue-dim), var(--blue-light), var(--blue-dim)); z-index: 0; }
+  .step-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 1rem 2rem; position: relative; z-index: 1; }
+  .step-num { width: 64px; height: 64px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--blue); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.25rem; box-shadow: 0 0 0 6px var(--blue-dim); }
+  .step-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+
+  /* CTA */
+  #pricing-nudge { background: var(--blue); padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  #pricing-nudge::before { content: ''; position: absolute; top: -100px; left: -100px; width: 400px; height: 400px; border-radius: 50%; background: rgba(255,255,255,0.06); pointer-events: none; }
+  .nudge-eyebrow { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1rem; }
+  .nudge-title { font-family: var(--font-display); font-size: clamp(2rem,5vw,3.2rem); font-weight: 700; color: #fff; margin-bottom: 1rem; line-height: 1.1; letter-spacing: -0.02em; }
+  .nudge-sub { font-size: 1.05rem; color: rgba(255,255,255,0.8); max-width: 540px; margin: 0 auto 2.5rem; line-height: 1.7; }
+  .nudge-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .nudge-btn-primary { background: #fff; color: var(--blue); padding: 0.85rem 2rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.9375rem; font-weight: 700; border: none; cursor: pointer; transition: all var(--transition); box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-decoration: none; display: inline-block; }
+  .nudge-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+  .nudge-btn-secondary { background: transparent; color: #fff; padding: 0.85rem 2rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.9375rem; font-weight: 700; border: 2px solid rgba(255,255,255,0.4); cursor: pointer; transition: all var(--transition); text-decoration: none; display: inline-block; }
+  .nudge-btn-secondary:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); }
+  .nudge-perks { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+  .nudge-perk { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 500; }
+  .nudge-perk-dot { color: #A7F3D0; }
+
+  @media (max-width: 760px) {
+    .hero-cards-row { grid-template-columns: 1fr; }
+    .cards-or { flex-direction: row; }
+    .cards-or::before { top: 50%; bottom: auto; left: 0; right: 0; width: auto; height: 1px; }
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .steps-grid::before { display: none; }
+    .comparison-header, .comparison-row { grid-template-columns: 1fr 1fr; }
+    .comp-cell:first-child { display: none; }
+    .stat-divider { display: none; }
+    .unified-stats { gap: 1.5rem; }
+  }
+  @media (max-width: 500px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .sc-stats { flex-wrap: wrap; }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index4.html" class="nav-brand">
+      <svg class="nav-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="10" fill="#0EA5E9"/>
+        <path d="M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z" fill="white"/>
+        <rect x="24" y="8" width="4" height="7" rx="1" fill="white" opacity="0.7"/>
+      </svg>
+      <span class="nav-brand-text">Harvin <span>Properties</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index4.html">Home</a></li>
+      <li><a href="buy.html">Buy / Sell</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="admin/index.html" style="color:var(--blue);font-weight:600;">📊 Admin</a></li>
+      <li><a href="#" class="nav-cta user-type-pill" data-type="tenant" data-mode="login">Sign In</a></li>
+    </ul>
+    <button id="nav-burger" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div id="mobile-menu" role="menu">
+    <a href="index4.html" role="menuitem">Home</a>
+    <a href="buy.html" role="menuitem">Buy / Sell</a>
+    <a href="features.html" role="menuitem">Features</a>
+    <a href="about.html" role="menuitem">About</a>
+    <a href="contact.html" role="menuitem">Contact</a>
+  </div>
+
+  <!-- ═══ HERO — SIDE-BY-SIDE CARDS ════════════════════════ -->
+  <section id="hero" aria-label="Hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-grain"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">✦ Your full-service real estate partner</p>
+      <h1 class="hero-title">Your Home,<br /><em>Our Priority</em></h1>
+      <p class="hero-subtitle">
+        Whether you're renting, buying, or selling — Harvin Properties is your trusted guide in the Pacific Northwest.
+      </p>
+
+      <!-- Side-by-side cards -->
+      <div class="hero-cards-row">
+
+        <!-- RENT card -->
+        <div class="service-card rent-card">
+          <span class="sc-badge blue">🏠 Rent &amp; Manage</span>
+          <div class="sc-title">Renting a home or managing a property?</div>
+          <p class="sc-desc">List, rent, and manage properties with transparent fees, digital leases, and automated rent collection.</p>
+
+          <div class="sc-roles" id="rent-roles">
+            <button class="sc-role-pill active" data-role="tenant" style="--pill-color:#0EA5E9;">🏠 Tenant</button>
+            <button class="sc-role-pill" data-role="landlord" style="--pill-color:#F59E0B;">🏢 Landlord</button>
+            <button class="sc-role-pill" data-role="manager" style="--pill-color:#10B981;">📋 Manager</button>
+          </div>
+
+          <div class="sc-btns">
+            <button class="sc-btn primary-blue" id="rent-signin-btn">Sign In →</button>
+            <div class="sc-divider"><span>or</span></div>
+            <button class="sc-btn outline-blue" id="rent-register-btn">Create Free Account</button>
+          </div>
+
+          <div class="sc-stats">
+            <div class="sc-stat">
+              <div class="sc-stat-num" style="color:var(--blue);">$0</div>
+              <div class="sc-stat-lbl">Listing Fee</div>
+            </div>
+            <div class="sc-stat">
+              <div class="sc-stat-num" style="color:var(--blue);">5%</div>
+              <div class="sc-stat-lbl">Mgmt. Fee</div>
+            </div>
+            <div class="sc-stat">
+              <div class="sc-stat-num" style="color:var(--blue);">98%</div>
+              <div class="sc-stat-lbl">On-Time Rent</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUY card -->
+        <div class="service-card buy-card">
+          <span class="sc-badge purple">🔑 Buy &amp; Sell</span>
+          <div class="sc-title">Ready to buy or sell a home?</div>
+          <p class="sc-desc">Full-service buyer and seller representation, free home valuations, and trusted local mortgage referrals.</p>
+
+          <div class="sc-roles" id="buy-roles">
+            <button class="sc-role-pill active" data-role="buyer" style="--pill-color:#8B5CF6;">🔑 Buyer</button>
+            <button class="sc-role-pill" data-role="seller" style="--pill-color:#EF4444;">🏷️ Seller</button>
+          </div>
+
+          <div class="sc-btns">
+            <a href="contact.html" class="sc-btn primary-purple">Talk to an Agent →</a>
+            <div class="sc-divider"><span>or</span></div>
+            <a href="buy.html" class="sc-btn outline-purple">Learn More About Buying</a>
+          </div>
+
+          <div class="sc-stats">
+            <div class="sc-stat">
+              <div class="sc-stat-num" style="color:#8B5CF6;">Free</div>
+              <div class="sc-stat-lbl">Consultation</div>
+            </div>
+            <div class="sc-stat">
+              <div class="sc-stat-num" style="color:#8B5CF6;">CMA</div>
+              <div class="sc-stat-lbl">Home Valuation</div>
+            </div>
+            <div class="sc-stat">
+              <div class="sc-stat-num" style="color:#8B5CF6;">Local</div>
+              <div class="sc-stat-lbl">PNW Experts</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Unified trust stats below the cards -->
+      <div class="unified-stats">
+        <div class="stat-item"><div class="stat-num">14<span> days</span></div><div class="stat-lbl">Avg. Time to Rent</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-num">5<span>%</span></div><div class="stat-lbl">Management Fee</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-num">$<span>0</span></div><div class="stat-lbl">Self-List Fee</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-num">Full<span></span></div><div class="stat-lbl">Buy &amp; Sell Support</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VALUE PROPOSITION ═════════════════════════════════ -->
+  <section id="value-prop" aria-labelledby="vp-heading">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-eyebrow">Why Harvin Properties</span>
+        <h2 class="section-title" id="vp-heading">The <em>Smarter</em> Choice</h2>
+        <p class="section-desc">Whether renting or buying, Harvin offers transparent pricing, expert guidance, and technology that works for you — not against you.</p>
+      </header>
+      <div class="vp-mode-tabs">
+        <button class="vp-tab active rent" data-vp="vp-rent">🏠 Rent &amp; Manage</button>
+        <button class="vp-tab buy" data-vp="vp-buy">🔑 Buy &amp; Sell</button>
+      </div>
+      <!-- RENT -->
+      <div class="vp-panel active" id="vp-rent">
+        <div class="comparison-wrap">
+          <div class="comparison-header">
+            <div class="comp-col-head">Feature</div>
+            <div class="comp-col-head harvin">Harvin Properties</div>
+            <div class="comp-col-head traditional">Traditional Agent</div>
+          </div>
+          <div class="comparison-row"><div class="comp-cell">Self-Listing Commission</div><div class="comp-cell harvin-cell"><span class="check">✓</span> 0% — Free</div><div class="comp-cell trad-cell"><span class="neutral">—</span> N/A</div></div>
+          <div class="comparison-row"><div class="comp-cell">Agent Listing Commission</div><div class="comp-cell harvin-cell"><span class="check">✓</span> 50% of first month</div><div class="comp-cell trad-cell"><span class="cross">✗</span> 50–100% of first month</div></div>
+          <div class="comparison-row"><div class="comp-cell">Management Commission</div><div class="comp-cell harvin-cell"><span class="check">✓</span> 5% monthly</div><div class="comp-cell trad-cell"><span class="cross">✗</span> 8–12% monthly</div></div>
+          <div class="comparison-row"><div class="comp-cell">Lease Signing</div><div class="comp-cell harvin-cell"><span class="check">✓</span> Digital, same day</div><div class="comp-cell trad-cell"><span class="neutral">~</span> Days of paperwork</div></div>
+          <div class="comparison-row"><div class="comp-cell">Rent Collection</div><div class="comp-cell harvin-cell"><span class="check">✓</span> Automatic ACH / card</div><div class="comp-cell trad-cell"><span class="cross">✗</span> Manual only</div></div>
+          <div class="comparison-row"><div class="comp-cell">Financial Reporting</div><div class="comp-cell harvin-cell"><span class="check">✓</span> Real-time dashboard</div><div class="comp-cell trad-cell"><span class="cross">✗</span> Monthly PDF (maybe)</div></div>
+          <div class="comparison-row"><div class="comp-cell">Tenant Screening</div><div class="comp-cell harvin-cell"><span class="check">✓</span> Instant credit + background</div><div class="comp-cell trad-cell"><span class="neutral">~</span> 3–5 business days</div></div>
+        </div>
+        <div class="pillars-grid">
+          <div class="pillar-card" style="--pillar-color:#0EA5E9;"><div class="pillar-icon">📣</div><h3 class="pillar-title">List in Minutes</h3><p class="pillar-desc">Self-list with no fee, or let our agents handle it. Reach verified tenants across our platform instantly.</p><span class="pillar-tag">Free Forever</span></div>
+          <div class="pillar-card" style="--pillar-color:#F59E0B;"><div class="pillar-icon">⚡</div><h3 class="pillar-title">Get Rented Fast</h3><p class="pillar-desc">Smart matching connects your listing to qualified renters. Average 14 days to a signed lease.</p><span class="pillar-tag">14-Day Avg</span></div>
+          <div class="pillar-card" style="--pillar-color:#10B981;"><div class="pillar-icon">✍️</div><h3 class="pillar-title">Digital Lease Execution</h3><p class="pillar-desc">State-compliant e-signatures, auto-renewal reminders, and documents stored forever in the cloud.</p><span class="pillar-tag">100% Digital</span></div>
+          <div class="pillar-card" style="--pillar-color:#8B5CF6;"><div class="pillar-icon">💳</div><h3 class="pillar-title">Auto Rent Collection</h3><p class="pillar-desc">ACH or card payments deposited in 1–2 days. Late fees applied automatically. 98% on-time rate.</p><span class="pillar-tag">98% On-Time</span></div>
+          <div class="pillar-card" style="--pillar-color:#EF4444;"><div class="pillar-icon">🔧</div><h3 class="pillar-title">Maintenance Tracking</h3><p class="pillar-desc">Photo-supported requests, vendor assignment, and full resolution tracking — all in one place.</p><span class="pillar-tag">In-App</span></div>
+          <div class="pillar-card" style="--pillar-color:#F97316;"><div class="pillar-icon">📊</div><h3 class="pillar-title">Real-Time Reporting</h3><p class="pillar-desc">Live NOI, vacancy rates, and expense tracking. Export for your accountant any time.</p><span class="pillar-tag">Live Dashboard</span></div>
+        </div>
+      </div>
+      <!-- BUY -->
+      <div class="vp-panel" id="vp-buy">
+        <div class="comparison-wrap">
+          <div class="comparison-header">
+            <div class="comp-col-head">Feature</div>
+            <div class="comp-col-head harvin purple">Harvin Properties</div>
+            <div class="comp-col-head traditional">Typical Agent</div>
+          </div>
+          <div class="comparison-row"><div class="comp-cell">Buyer Consultation</div><div class="comp-cell harvin-cell purple"><span class="check">✓</span> Free, no obligation</div><div class="comp-cell trad-cell"><span class="neutral">~</span> Often a sales pitch</div></div>
+          <div class="comparison-row"><div class="comp-cell">Home Valuation / CMA</div><div class="comp-cell harvin-cell purple"><span class="check">✓</span> Free, data-driven</div><div class="comp-cell trad-cell"><span class="cross">✗</span> Paid or biased</div></div>
+          <div class="comparison-row"><div class="comp-cell">Buyer Agent Commission</div><div class="comp-cell harvin-cell purple"><span class="check">✓</span> Competitive, transparent</div><div class="comp-cell trad-cell"><span class="neutral">~</span> Varies, often opaque</div></div>
+          <div class="comparison-row"><div class="comp-cell">Seller Listing Commission</div><div class="comp-cell harvin-cell purple"><span class="check">✓</span> Negotiable rate</div><div class="comp-cell trad-cell"><span class="cross">✗</span> Fixed 2–3% listing side</div></div>
+          <div class="comparison-row"><div class="comp-cell">Mortgage Referrals</div><div class="comp-cell harvin-cell purple"><span class="check">✓</span> Trusted local lenders</div><div class="comp-cell trad-cell"><span class="neutral">~</span> Generic or none</div></div>
+          <div class="comparison-row"><div class="comp-cell">Offer &amp; Negotiation Support</div><div class="comp-cell harvin-cell purple"><span class="check">✓</span> Expert, data-backed</div><div class="comp-cell trad-cell"><span class="neutral">~</span> Agent-dependent</div></div>
+          <div class="comparison-row"><div class="comp-cell">Post-Close Support</div><div class="comp-cell harvin-cell purple"><span class="check">✓</span> Ongoing &amp; available</div><div class="comp-cell trad-cell"><span class="cross">✗</span> Disappears at close</div></div>
+        </div>
+        <div class="pillars-grid">
+          <div class="pillar-card" style="--pillar-color:#8B5CF6;"><div class="pillar-icon">🔑</div><h3 class="pillar-title">Buyer Representation</h3><p class="pillar-desc">Expert guidance from first search to keys in hand. We negotiate hard with local market knowledge behind every offer.</p><span class="pillar-tag">Free Consultation</span></div>
+          <div class="pillar-card" style="--pillar-color:#EF4444;"><div class="pillar-icon">🏷️</div><h3 class="pillar-title">Seller Representation</h3><p class="pillar-desc">Professional listing, staging advice, MLS syndication, and skilled negotiation to maximize your sale price.</p><span class="pillar-tag">Full Service</span></div>
+          <div class="pillar-card" style="--pillar-color:#F59E0B;"><div class="pillar-icon">📈</div><h3 class="pillar-title">Free Home Valuation</h3><p class="pillar-desc">Data-driven Comparative Market Analysis — no strings attached. Know your home's true market value before you decide.</p><span class="pillar-tag">No Obligation</span></div>
+          <div class="pillar-card" style="--pillar-color:#10B981;"><div class="pillar-icon">🏦</div><h3 class="pillar-title">Mortgage Referrals</h3><p class="pillar-desc">Connections to trusted Pacific Northwest lenders. Get pre-approved fast and find financing that fits your goals.</p><span class="pillar-tag">Local Lenders</span></div>
+          <div class="pillar-card" style="--pillar-color:#0EA5E9;"><div class="pillar-icon">📋</div><h3 class="pillar-title">Offer &amp; Contract Support</h3><p class="pillar-desc">Crafting competitive offers, reviewing inspections, navigating contingencies — keeping every transaction on track.</p><span class="pillar-tag">Expert Guidance</span></div>
+          <div class="pillar-card" style="--pillar-color:#F97316;"><div class="pillar-icon">🤝</div><h3 class="pillar-title">Close &amp; Beyond</h3><p class="pillar-desc">Our relationship doesn't end at closing. Contractors, property managers, or tenants — Harvin is your long-term partner.</p><span class="pillar-tag">Lifetime Support</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HOW IT WORKS ══════════════════════════════════════ -->
+  <section id="how-it-works" aria-labelledby="how-heading">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-eyebrow">Simple by Design</span>
+        <h2 class="section-title" id="how-heading">How It <em>Works</em></h2>
+        <p class="section-desc">Whether renting, buying, or selling — we've mapped out every step so you always know what comes next.</p>
+      </header>
+      <div class="how-tabs" role="tablist">
+        <button class="how-tab active" data-panel="hiw-landlord">For Landlords</button>
+        <button class="how-tab" data-panel="hiw-tenant">For Tenants</button>
+        <button class="how-tab" data-panel="hiw-buyer">For Buyers</button>
+        <button class="how-tab" data-panel="hiw-seller">For Sellers</button>
+        <button class="how-tab" data-panel="hiw-manager">For Managers</button>
+      </div>
+      <div class="how-panel active" id="hiw-landlord">
+        <div class="steps-grid">
+          <div class="step-item"><div class="step-num">📞</div><h3 class="step-title">1. Reach Out to Us</h3><p class="step-desc">Contact our team. We walk you through the process and get your listing live quickly.</p></div>
+          <div class="step-item"><div class="step-num">🔍</div><h3 class="step-title">2. Screen Tenants</h3><p class="step-desc">Instant credit, background, and eviction checks to approve the right tenant with confidence.</p></div>
+          <div class="step-item"><div class="step-num">✍️</div><h3 class="step-title">3. Sign the Lease</h3><p class="step-desc">State-compliant digital lease sent, signed, and stored automatically. No paperwork needed.</p></div>
+          <div class="step-item"><div class="step-num">💰</div><h3 class="step-title">4. Collect Rent</h3><p class="step-desc">Automated monthly deposits. Late fees handled. You get paid, we handle the follow-up.</p></div>
+        </div>
+      </div>
+      <div class="how-panel" id="hiw-tenant">
+        <div class="steps-grid">
+          <div class="step-item"><div class="step-num">🔎</div><h3 class="step-title">1. Search &amp; Browse</h3><p class="step-desc">Filter by location, price, beds, and amenities. Schedule showings through the app.</p></div>
+          <div class="step-item"><div class="step-num">📋</div><h3 class="step-title">2. Apply Online</h3><p class="step-desc">One universal application. Upload documents once and apply to multiple properties.</p></div>
+          <div class="step-item"><div class="step-num">🏠</div><h3 class="step-title">3. Move In</h3><p class="step-desc">Sign your lease digitally, pay your deposit securely, and access the tenant portal from day one.</p></div>
+          <div class="step-item"><div class="step-num">😊</div><h3 class="step-title">4. Stay Happy</h3><p class="step-desc">Pay rent, submit maintenance requests, and message your landlord — all in one app.</p></div>
+        </div>
+      </div>
+      <div class="how-panel" id="hiw-buyer">
+        <div class="steps-grid">
+          <div class="step-item"><div class="step-num">💬</div><h3 class="step-title">1. Free Consultation</h3><p class="step-desc">Tell us what you're looking for. We match you with a local agent and map out your home-buying plan.</p></div>
+          <div class="step-item"><div class="step-num">🏦</div><h3 class="step-title">2. Get Pre-Approved</h3><p class="step-desc">Connect with trusted local lenders for fast pre-approval — so your offer is competitive from day one.</p></div>
+          <div class="step-item"><div class="step-num">🔎</div><h3 class="step-title">3. Search &amp; Tour</h3><p class="step-desc">Browse curated listings, schedule tours, and get expert insight on every property you visit.</p></div>
+          <div class="step-item"><div class="step-num">🔑</div><h3 class="step-title">4. Offer to Keys</h3><p class="step-desc">We write and negotiate your offer, manage inspections, and guide you all the way to closing.</p></div>
+        </div>
+      </div>
+      <div class="how-panel" id="hiw-seller">
+        <div class="steps-grid">
+          <div class="step-item"><div class="step-num">📈</div><h3 class="step-title">1. Free Valuation</h3><p class="step-desc">Get a data-backed CMA showing your home's true market value — no obligation, no pressure.</p></div>
+          <div class="step-item"><div class="step-num">📸</div><h3 class="step-title">2. Prepare to List</h3><p class="step-desc">Staging advice, professional photography, and a compelling listing to attract serious buyers.</p></div>
+          <div class="step-item"><div class="step-num">📣</div><h3 class="step-title">3. Market Your Home</h3><p class="step-desc">MLS listing, digital marketing, open houses, and agent network outreach for maximum exposure.</p></div>
+          <div class="step-item"><div class="step-num">💰</div><h3 class="step-title">4. Accept &amp; Close</h3><p class="step-desc">Expert offer review, skilled negotiation, and smooth transaction management right through to close.</p></div>
+        </div>
+      </div>
+      <div class="how-panel" id="hiw-manager">
+        <div class="steps-grid">
+          <div class="step-item"><div class="step-num">🏢</div><h3 class="step-title">1. Import Portfolio</h3><p class="step-desc">Add all managed properties in bulk. Invite owners and tenants with a single link.</p></div>
+          <div class="step-item"><div class="step-num">📅</div><h3 class="step-title">2. Automate Operations</h3><p class="step-desc">Rent schedules, maintenance workflows, and inspection calendars — set once, run automatically.</p></div>
+          <div class="step-item"><div class="step-num">📊</div><h3 class="step-title">3. Report to Owners</h3><p class="step-desc">Auto-generated monthly owner statements. Full income and expense breakdown every time.</p></div>
+          <div class="step-item"><div class="step-num">📈</div><h3 class="step-title">4. Grow Your Portfolio</h3><p class="step-desc">Take on more units without more headcount. Harvin scales with you from 10 to 1,000 units.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ════════════════════════════════════════════════ -->
+  <section id="pricing-nudge">
+    <p class="nudge-eyebrow">Rent · Buy · Sell · Manage — All under one roof</p>
+    <h2 class="nudge-title">Your Full-Service<br />Real Estate Partner</h2>
+    <p class="nudge-sub">Whether you're renting out a property, searching for your first home, or growing a portfolio — Harvin Properties is with you every step of the way.</p>
+    <div class="nudge-btns">
+      <a href="contact.html" class="nudge-btn-primary">Get Started — It's Free →</a>
+      <a href="buy.html" class="nudge-btn-secondary">Explore Buy &amp; Sell</a>
+    </div>
+    <div class="nudge-perks">
+      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> Free consultation</span>
+      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> No hidden fees</span>
+      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> Pacific NW experts</span>
+      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> One platform for everything</span>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-eyebrow">The People Behind Harvin Properties</span>
+        <h2 class="section-title">Meet the <em>Team</em></h2>
+        <p class="section-desc">Real estate professionals and technologists united by one goal — a better experience for every buyer, seller, and renter.</p>
+      </header>
+      <div class="team-grid" id="team-grid" role="list"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <div class="footer-logo">
+          <svg class="footer-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="10" fill="#0EA5E9"/>
+            <path d="M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z" fill="white"/>
+            <rect x="24" y="8" width="4" height="7" rx="1" fill="white" opacity="0.7"/>
+          </svg>
+          <div class="footer-logo-text">Harvin <span>Properties</span></div>
+        </div>
+        <p class="footer-tagline">Your full-service real estate partner — renting, buying, selling, and managing property in the Pacific Northwest.</p>
+        <div class="footer-social-row" id="footer-social"></div>
+      </div>
+      <div id="footer-columns" style="display:contents;"></div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; <span id="footer-year"></span> Harvin Properties, Inc. All rights reserved.</p>
+      <nav class="footer-legal" id="footer-legal"></nav>
+    </div>
+  </footer>
+
+  <div id="modal-overlay" role="presentation" aria-hidden="true"></div>
+  <div id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-subtitle">
+    <header class="modal-header">
+      <div class="modal-header-left"><div id="modal-user-icon"></div><div><h2 id="modal-title"></h2><p id="modal-subtitle"></p></div></div>
+      <button id="modal-close" aria-label="Close">✕</button>
+    </header>
+    <div class="modal-tabs" role="tablist">
+      <button class="modal-tab" id="tab-login" role="tab" aria-selected="true">Sign In</button>
+      <button class="modal-tab" id="tab-register" role="tab" aria-selected="false">Register</button>
+    </div>
+    <div class="modal-body"><div id="form-container" role="tabpanel"></div></div>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+  (function() {
+    /* ── Rent role pills ── */
+    let rentRole = 'tenant';
+    document.querySelectorAll('#rent-roles .sc-role-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('#rent-roles .sc-role-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active'); rentRole = pill.dataset.role;
+      });
+    });
+    document.getElementById('rent-signin-btn').addEventListener('click', () => { if (typeof openModal === 'function') openModal(rentRole, 'login'); });
+    document.getElementById('rent-register-btn').addEventListener('click', () => { if (typeof openModal === 'function') openModal(rentRole, 'register'); });
+
+    /* ── Buy role pills ── */
+    document.querySelectorAll('#buy-roles .sc-role-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('#buy-roles .sc-role-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      });
+    });
+
+    /* ── Value prop tabs ── */
+    document.querySelectorAll('.vp-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.vp-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.vp-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.vp).classList.add('active');
+      });
+    });
+
+    /* ── How It Works tabs ── */
+    document.querySelectorAll('.how-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.how-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+        document.querySelectorAll('.how-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+        document.getElementById(tab.dataset.panel).classList.add('active');
+      });
+    });
+
+    /* ── Scroll animations ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.pillar-card').forEach(el => obs.observe(el));
+  })();
+  </script>
+</body>
+</html>

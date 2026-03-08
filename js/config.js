@@ -89,7 +89,7 @@ const USER_TYPES = {
 };
 
 // ============================================================
-// TEAM MEMBERS
+// TEAM MEMBERS — 3 members only
 // ============================================================
 
 const TEAM_MEMBERS = [
@@ -104,52 +104,22 @@ const TEAM_MEMBERS = [
     twitter: "#",
   },
   {
-    name: "Marcus Reyes",
+    name: "Santosh",
     role: "CTO & Co-Founder",
-    bio: "Full-stack architect with a love for scalable systems. Built platforms serving millions of users at Amazon.",
-    avatar: "MR",
+    bio: "Full-stack architect with a passion for scalable systems. Santosh leads the technology vision behind Harvin Properties' platform.",
+    avatar: "S",
     photo: null,
     accentColor: "#F59E0B",
     linkedin: "#",
     twitter: "#",
   },
   {
-    name: "Priya Nair",
+    name: "Disha",
     role: "Head of Product",
-    bio: "UX obsessive and product strategist. Her mission: make complex workflows feel effortless.",
-    avatar: "PN",
+    bio: "UX obsessive and product strategist. Disha's mission is to make complex property workflows feel effortless for everyone on the platform.",
+    avatar: "D",
     photo: null,
     accentColor: "#EF4444",
-    linkedin: "#",
-    twitter: "#",
-  },
-  {
-    name: "Tom Whitfield",
-    role: "Head of Landlord Relations",
-    bio: "A landlord himself. Tom bridges product and real-world property ownership with empathy and depth.",
-    avatar: "TW",
-    photo: null,
-    accentColor: "#10B981",
-    linkedin: "#",
-    twitter: "#",
-  },
-  {
-    name: "Aisha Fontaine",
-    role: "Lead Designer",
-    bio: "Former architect turned digital designer. Brings spatial thinking to every interface she touches.",
-    avatar: "AF",
-    photo: null,
-    accentColor: "#8B5CF6",
-    linkedin: "#",
-    twitter: "#",
-  },
-  {
-    name: "Dev Sharma",
-    role: "Head of Customer Success",
-    bio: "The champion of tenants everywhere. Dev ensures every user feels supported from day one.",
-    avatar: "DS",
-    photo: null,
-    accentColor: "#F97316",
     linkedin: "#",
     twitter: "#",
   },
