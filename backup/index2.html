@@ -3,8 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Harvin Properties — Buy, Sell, Rent or Manage. Your full-service real estate platform in the Pacific Northwest." />
+  <meta name="description" content="Expert real estate help for buyers, sellers, and landlords." />
   <title>Harvin Properties — Buy, Sell & Rent</title>
+
+  <!-- Open Graph / WhatsApp / iMessage / Slack preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://harvinproperties.com/" />
+  <meta property="og:title"       content="Harvin Properties — Buy, Sell & Rent" />
+  <meta property="og:description" content="Expert real estate help for buyers, sellers, and landlords." />
+  <meta property="og:image"       content="https://harvinproperties.com/images/og-preview.png" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name"   content="Harvin Properties" />
+  <!-- Twitter / X card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Harvin Properties — Buy, Sell & Rent" />
+  <meta name="twitter:description" content="Expert real estate help for buyers, sellers, and landlords." />
+  <meta name="twitter:image"       content="https://harvinproperties.com/images/og-preview.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='10' fill='%230EA5E9'/><path d='M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z' fill='white'/></svg>" />
   <script src="js/theme.js"></script>
   <script>ThemeManager.init();</script>
@@ -97,7 +112,7 @@
   /* Stats bar */
   .stats-bar {
     display: flex; align-items: center; justify-content: center;
-    gap: 2.5rem; flex-wrap: wrap; margin-top: 2.5rem;
+    gap: 2.5rem; flex-wrap: wrap; margin-top: 0.75rem; margin-bottom: 0;
     animation: fadeUp 0.7s 0.4s ease both;
   }
   .stat-item { text-align: center; }
@@ -113,7 +128,7 @@
   .stat-divider { width: 1px; height: 40px; background: var(--border-strong); }
 
   /* Value prop section */
-  #value-prop { background: var(--bg); padding: 7rem 2rem; transition: background 0.35s; }
+  #value-prop { background: var(--bg); padding: 2rem 2rem 4rem; transition: background 0.35s; }
   .vp-mode-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3.5rem; }
   .vp-tab {
     padding: 0.6rem 1.8rem; border-radius: 100px;
@@ -204,8 +219,15 @@
     .auth-action-row { grid-template-columns: 1fr; }
     .steps-grid { grid-template-columns: 1fr 1fr; }
     .steps-grid::before { display: none; }
-    .comparison-header, .comparison-row { grid-template-columns: 1fr 1fr; }
+    /* Mobile: 2-col table — hide feature label col, show only Harvin + Traditional */
+    .comparison-header,
+    .comparison-row { grid-template-columns: 1fr 1fr; }
+    .comp-col-head:first-child,
     .comp-cell:first-child { display: none; }
+    /* Dim traditional so Harvin clearly wins */
+    .comp-col-head.traditional,
+    .comp-cell.trad-cell { opacity: 0.65; }
+    .comp-col-head.traditional { font-size: 0.7rem; color: var(--text-muted); }
     .stat-divider { display: none; }
   }
   @media (max-width: 600px) {
@@ -220,7 +242,7 @@
 
   <!-- NAVBAR -->
   <nav id="navbar" role="navigation" aria-label="Main navigation">
-    <a href="index2.html" class="nav-brand" aria-label="Harvin Properties Home">
+    <a href="index.html" class="nav-brand" aria-label="Harvin Properties Home">
       <svg class="nav-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <rect width="40" height="40" rx="10" fill="#0EA5E9"/>
         <path d="M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z" fill="white"/>
@@ -229,11 +251,11 @@
       <span class="nav-brand-text">Harvin <span>Properties</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="index2.html">Home</a></li>
+      <li><a href="index.html">Home</a></li>
       <li><a href="buy.html">Buy / Sell</a></li>
       <li><a href="features.html">Features</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
       <li><a href="admin/index.html" style="color:var(--blue);font-weight:600;">📊 Admin</a></li>
       <li><a href="#" class="nav-cta user-type-pill" data-type="tenant" data-mode="login">Sign In</a></li>
     </ul>
@@ -242,7 +264,7 @@
     </button>
   </nav>
   <div id="mobile-menu" role="menu">
-    <a href="index2.html" role="menuitem">Home</a>
+    <a href="index.html" role="menuitem">Home</a>
     <a href="buy.html" role="menuitem">Buy / Sell</a>
     <a href="features.html" role="menuitem">Features</a>
     <a href="about.html" role="menuitem">About</a>
@@ -327,7 +349,7 @@
             </button>
             <button class="role-btn" data-role="manager">
               <span class="role-btn-icon">📋</span>
-              <span class="role-btn-name">Manager</span>
+              <span class="role-btn-name">Property Manager</span>
               <span class="role-btn-sub">Manage portfolios</span>
             </button>
           </div>
@@ -555,6 +577,55 @@
   <script src="js/config.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/app.js"></script>
+
+  <!-- ═══ THEME SWITCHER WIDGET ══════════════════════════════ -->
+  <div id="theme-switcher-fab" aria-label="Change site theme" style="
+    position:fixed; bottom:1.5rem; right:1.5rem; z-index:9000;
+    display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;
+  ">
+    <div id="theme-switcher-panel" style="
+      display:none; flex-direction:column; gap:0.35rem;
+      background:var(--bg-card); border:1px solid var(--border-strong);
+      border-radius:14px; padding:0.6rem; box-shadow:var(--shadow-modal);
+    ">
+      <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);padding:0.1rem 0.3rem 0.3rem;">Site Theme</div>
+      <div style="display:flex;gap:0.4rem;padding:0 0.2rem 0.2rem;">
+        <button onclick="siteSetTheme('ocean')"    title="Ocean (Blue)"          data-st="ocean"    style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#0EA5E9,#38BDF8);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('blaze')"    title="Blaze (Dark Orange)"   data-st="blaze"    style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#1a1a1a,#F97316);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('emerald')"  title="Emerald (Green)"       data-st="emerald"  style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#10B981,#6EE7B7);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('midnight')" title="Midnight (Purple)"     data-st="midnight" style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#1E1B4B,#8B5CF6);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('rose')"     title="Rose (Pink)"           data-st="rose"     style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#F43F5E,#FDA4AF);transition:all 0.18s;"></button>
+      </div>
+    </div>
+    <button id="theme-fab-btn" onclick="document.getElementById('theme-switcher-panel').style.display = document.getElementById('theme-switcher-panel').style.display==='flex'?'none':'flex'" aria-label="Toggle theme panel" style="
+      width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+      background:var(--blue);color:#fff;font-size:1.1rem;
+      box-shadow:0 4px 20px var(--blue-dim);transition:all 0.25s;
+      display:flex;align-items:center;justify-content:center;
+    ">🎨</button>
+  </div>
+  <script>
+  (function(){
+    function siteSetTheme(name) {
+      ThemeManager.set(name);
+      document.querySelectorAll('[data-st]').forEach(b => {
+        b.style.borderColor = b.dataset.st === name ? 'var(--text-primary)' : 'transparent';
+        b.style.transform   = b.dataset.st === name ? 'scale(1.18)' : 'scale(1)';
+      });
+    }
+    window.siteSetTheme = siteSetTheme;
+    // Highlight current theme on load
+    siteSetTheme(ThemeManager.load());
+    // Close panel on outside click
+    document.addEventListener('click', function(e) {
+      const fab = document.getElementById('theme-switcher-fab');
+      if (fab && !fab.contains(e.target)) {
+        document.getElementById('theme-switcher-panel').style.display = 'none';
+      }
+    });
+  })();
+  </script>
+
   <script>
   (function() {
     /* ── Mode toggle — default: buy ── */
@@ -633,6 +704,25 @@
         document.getElementById(tab.dataset.panel).classList.add('active');
       });
     });
+
+    /* ── Mobile: swap comparison columns so Harvin is always LEFT ── */
+    function swapComparisonCols() {
+      const isMobile = window.innerWidth <= 900;
+      document.querySelectorAll('.comparison-header, .comparison-row').forEach(row => {
+        const harvin = row.querySelector('.comp-col-head.harvin, .comp-cell.harvin-cell');
+        const trad   = row.querySelector('.comp-col-head.traditional, .comp-cell.trad-cell');
+        const feat   = row.children[0]; // feature label (hidden on mobile)
+        if (!harvin || !trad) return;
+        if (isMobile) {
+          // Ensure order: [feat(hidden)], [harvin], [trad]
+          if (harvin.previousElementSibling !== feat) {
+            row.insertBefore(harvin, trad);
+          }
+        }
+      });
+    }
+    swapComparisonCols();
+    window.addEventListener('resize', swapComparisonCols);
 
     /* ── Scroll animations ── */
     const obs = new IntersectionObserver(entries => {
