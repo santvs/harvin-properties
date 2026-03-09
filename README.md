@@ -270,4 +270,63 @@ In GitHub → **Settings → Pages → Enforce HTTPS** ✅ (enable after DNS pro
 
 ---
 
+---
+
+## 📧 Business Email Setup (ImprovMX + Gmail)
+
+Free custom email forwarding for `@harvinproperties.com` using [ImprovMX](https://app.improvmx.com).
+
+### Step 1 — Add Your Domain in ImprovMX
+1. Log in at [app.improvmx.com](https://app.improvmx.com)
+2. Click **"Add a domain"**
+3. Enter `harvinproperties.com` and confirm
+
+### Step 2 — Add DNS Records at GoDaddy
+
+Go to **GoDaddy → DNS Management** for `harvinproperties.com` and add these records:
+
+**MX Records** (for receiving email):
+| Type | Host | Value | Priority | TTL |
+|------|------|-------|----------|-----|
+| MX | @ | mx1.improvmx.com | 10 | 600 |
+| MX | @ | mx2.improvmx.com | 20 | 600 |
+
+**TXT Record** (to prevent emails going to spam):
+| Type | Host | Value | TTL |
+|------|------|-------|-----|
+| TXT | @ | `v=spf1 include:spf.improvmx.com ~all` | 600 |
+
+> ⚠️ If a `v=spf1` TXT record already exists, append `include:spf.improvmx.com` to it rather than creating a new one.
+
+### Step 3 — Create Email Aliases in ImprovMX
+1. In ImprovMX, click your domain
+2. Click **"Add an alias"** for each address you want:
+
+| Alias | Forwards To |
+|-------|-------------|
+| `hello` | your-personal@gmail.com |
+| `listings` | your-personal@gmail.com |
+| `support` | your-personal@gmail.com |
+
+### Step 4 — Send FROM Your Custom Domain via Gmail (Free)
+
+This lets you reply as `hello@harvinproperties.com` directly from Gmail:
+
+1. Open **Gmail → Settings (⚙️) → See All Settings**
+2. Go to the **Accounts** tab → click **"Add another email address"**
+3. Enter name: `Harvin Properties` and email: `hello@harvinproperties.com`
+4. Use Gmail's SMTP — enter:
+   - SMTP Server: `smtp.gmail.com`
+   - Port: `587`
+   - Username: your Gmail address
+   - Password: a [Gmail App Password](https://myaccount.google.com/apppasswords) (requires 2FA enabled)
+5. Gmail sends a **verification code** to `hello@harvinproperties.com`
+   - ImprovMX forwards it to your personal Gmail inbox
+   - Enter the code to confirm
+6. ✅ You can now **send and receive** as `hello@harvinproperties.com` from Gmail for free
+
+> 💡 DNS changes typically take **15–30 minutes** to propagate. If ImprovMX doesn't verify immediately, wait and retry.
+
+---
+
 *Last updated: March 2026 · Harvin Properties, Inc.*
