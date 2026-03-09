@@ -8,6 +8,9 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='10' fill='%230EA5E9'/><path d='M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z' fill='white'/></svg>" />
   <script src="js/theme.js"></script>
   <script>ThemeManager.init();</script>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('_Di9FoRoJ281YM7Vu');</script>
   <link rel="stylesheet" href="css/styles.css" />
   <style>
   .page-hero {
@@ -494,36 +497,40 @@
 
       if (!valid) return;
 
-      // Build mailto link to send email
-      const phone    = document.getElementById('cf-phone').value.trim();
+      // Grab remaining fields
+      const phone     = document.getElementById('cf-phone').value.trim();
       const hearAbout = document.getElementById('cf-hear').value;
 
-      const emailBody = [
-        'Name: ' + firstName + ' ' + lastName,
-        'Email: ' + email,
-        phone ? 'Phone: ' + phone : null,
-        'Role: ' + role,
-        hearAbout ? 'How they heard: ' + hearAbout : null,
-        '',
-        'Message:',
-        message
-      ].filter(Boolean).join('\n');
-
-      const mailtoLink = 'mailto:hello@harvinproperties.com'
-        + '?subject=' + encodeURIComponent('[Harvin Properties] ' + subject)
-        + '&body=' + encodeURIComponent(emailBody);
-
-      // Open mail client
-      window.location.href = mailtoLink;
-
-      // Show success UI after a short delay (in case user closes mail client)
+      // Disable button + show loading state
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span>Sending…</span>';
 
-      setTimeout(() => {
+      // Send via EmailJS — variable names must match your template exactly
+      emailjs.send(
+        'service_dlas11d',
+        'template_5b3z9ga',
+        {
+          from_name:   firstName + ' ' + lastName,
+          from_email:  email,
+          phone:       phone      || 'Not provided',
+          role:        role,
+          subject:     subject,
+          message:     message,
+          hear_about:  hearAbout  || 'Not specified'
+        }
+      )
+      .then(function() {
+        // Success — show thank you state
         document.getElementById('contact-form-container').style.display = 'none';
         successEl.classList.add('show');
-      }, 800);
+      })
+      .catch(function(error) {
+        // Failed — re-enable form and alert user
+        console.error('EmailJS error:', error);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Send Message</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+        alert('Something went wrong sending your message. Please email us directly at hello@harvinproperties.com');
+      });
     });
   })();
   </script>
