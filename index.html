@@ -32,9 +32,9 @@
     color: var(--text-muted); transition: all 0.25s ease; white-space: nowrap;
   }
   .mode-btn.active {
-    background: var(--active-mode-bg, #8B5CF6);
+    background: var(--active-mode-bg, var(--blue));
     color: #fff;
-    box-shadow: 0 2px 12px color-mix(in srgb, var(--active-mode-bg, #8B5CF6) 30%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--active-mode-bg, var(--blue)) 30%, transparent);
   }
   .mode-btn:hover:not(.active) { color: var(--text-primary); }
 
@@ -122,7 +122,7 @@
     background: var(--bg-card); color: var(--text-secondary);
     cursor: pointer; transition: all var(--transition);
   }
-  .vp-tab.active.buy  { background: #8B5CF6; color: #fff; border-color: #8B5CF6; box-shadow: 0 4px 16px rgba(139,92,246,0.25); }
+  .vp-tab.active.buy  { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 4px 16px var(--blue-dim); }
   .vp-tab.active.rent { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 4px 16px var(--blue-dim); }
   .vp-tab:hover:not(.active) { border-color: var(--blue); color: var(--blue); }
   .vp-panel { display: none; }
@@ -143,10 +143,10 @@
   .comp-col-head { padding: 1.25rem 1.5rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
   .comp-col-head:first-child { text-align: left; color: var(--text-muted); }
   .comp-col-head.harvin { background: var(--blue-dim); color: var(--blue); border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.35rem; }
-  .comp-col-head.harvin.purple { background: rgba(139,92,246,0.08); color: #8B5CF6; }
+  .comp-col-head.harvin.purple { background: var(--blue-dim); color: var(--blue); }
   .comp-col-head.harvin::before { content: none; }
   .best-value-badge { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; padding: 0.22rem 0.8rem; border-radius: 100px; white-space: nowrap; background: var(--blue); color: #fff; }
-  .best-value-badge.purple { background: #8B5CF6; }
+  .best-value-badge.purple { background: var(--blue); }
   .comp-col-head.traditional { color: var(--text-secondary); }
   .comparison-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-bottom: 1px solid var(--border); transition: background var(--transition); }
   .comparison-row:last-child { border-bottom: none; }
@@ -154,10 +154,20 @@
   .comp-cell { padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
   .comp-cell:first-child { font-weight: 600; color: var(--text-primary); font-size: 0.8rem; }
   .comp-cell.harvin-cell { background: color-mix(in srgb, var(--blue) 4%, transparent); color: var(--text-primary); font-weight: 600; border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong); justify-content: center; text-align: center; }
-  .comp-cell.harvin-cell.purple { background: rgba(139,92,246,0.04); }
+  .comp-cell.harvin-cell.purple { background: color-mix(in srgb, var(--blue) 4%, transparent); }
   .comp-cell.trad-cell { justify-content: center; text-align: center; }
   .check { color: #10B981; } .cross { color: #EF4444; } .neutral { color: var(--text-muted); }
 
+  /* Coming Soon badge */
+  .coming-soon-badge {
+    display: inline-flex; align-items: center;
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0.15rem 0.5rem;
+    border-radius: 100px; margin-left: 0.45rem;
+    background: rgba(245,158,11,0.15); color: #F59E0B;
+    border: 1px solid rgba(245,158,11,0.3); vertical-align: middle;
+    white-space: nowrap;
+  }
   /* Feature pillars */
   .pillars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.25rem; max-width: 1200px; margin: 0 auto; }
   .pillar-card { background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 1.75rem; opacity: 0; transform: translateY(20px); transition: all 0.28s ease, opacity 0.55s ease, transform 0.55s ease; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
@@ -231,6 +241,7 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="buy.html">Buy / Sell</a></li>
+      <li><a href="index.html#mode-rent" id="nav-rent-link">Rent <span style="font-size:0.6rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);vertical-align:middle;margin-left:3px;">Soon</span></a></li>
       <li><a href="features.html">Features</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
@@ -244,6 +255,7 @@
   <div id="mobile-menu" role="menu">
     <a href="index.html" role="menuitem">Home</a>
     <a href="buy.html" role="menuitem">Buy / Sell</a>
+    <a href="index.html#mode-rent" role="menuitem">Rent <span style="font-size:0.6rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);margin-left:3px;">Soon</span></a>
     <a href="features.html" role="menuitem">Features</a>
     <a href="about.html" role="menuitem">About</a>
     <a href="contact.html" role="menuitem">Contact</a>
@@ -260,22 +272,22 @@
 
       <!-- Toggle: Buy & Sell (default) / Rent -->
       <div class="mode-toggle" role="group" aria-label="Select service type" id="mode-toggle">
-        <button class="mode-btn active" id="btn-buy" data-mode="buy" style="--active-mode-bg:#8B5CF6;">
+        <button class="mode-btn active" id="btn-buy" data-mode="buy" style="--active-mode-bg:var(--blue);">
           🔑 Buy &amp; Sell
         </button>
-        <button class="mode-btn" id="btn-rent" data-mode="rent" style="--active-mode-bg:#0EA5E9;">
-          🏠 Rent
+        <button class="mode-btn" id="btn-rent" data-mode="rent" style="--active-mode-bg:var(--blue);">
+          🏠 Rent <span class="coming-soon-badge">Soon</span>
         </button>
       </div>
 
       <!-- ── BUY & SELL mode (default active) ── -->
       <div class="hero-mode active" id="mode-buy">
-        <p class="hero-eyebrow" style="color:#8B5CF6;background:rgba(139,92,246,0.08);border-color:rgba(139,92,246,0.25);">✦ Full-service real estate</p>
-        <h1 class="hero-title">Your Next Home,<br /><em style="color:#8B5CF6;">We'll Find It</em></h1>
+        <p class="hero-eyebrow" style="color:var(--blue);background:var(--blue-dim);border-color:var(--border-strong);">✦ Full-service real estate</p>
+        <h1 class="hero-title">Your Next Home,<br /><em style="color:var(--blue);">We'll Find It</em></h1>
         <p class="hero-subtitle">
           Harvin Properties guides buyers and sellers through every step — from property search and valuation to offer, escrow, and keys in hand.
         </p>
-        <div class="auth-simple" style="border-color:rgba(139,92,246,0.25);">
+        <div class="auth-simple" style="border-color:var(--border-strong);">
           <p class="auth-simple-title">I want to…</p>
           <div class="role-btn-row cols-2" id="buy-role-selector">
             <button class="role-btn active" data-role="buyer">
@@ -290,18 +302,18 @@
             </button>
           </div>
           <div class="auth-action-row">
-            <button class="auth-action-btn rent-primary" id="buy-cta-primary" style="background:#8B5CF6;box-shadow:0 4px 16px rgba(139,92,246,0.3);">Get Started →</button>
-            <a href="contact.html" class="auth-action-btn rent-outline" style="color:#8B5CF6;border-color:rgba(139,92,246,0.3);text-decoration:none;display:flex;align-items:center;justify-content:center;">Talk to an Agent</a>
+            <button class="auth-action-btn rent-primary" id="buy-cta-primary" style="background:var(--blue);box-shadow:0 4px 16px var(--blue-dim);">Get Started →</button>
+            <a href="contact.html" class="auth-action-btn rent-outline" style="color:var(--blue);border-color:var(--border-strong);text-decoration:none;display:flex;align-items:center;justify-content:center;">Talk to an Agent</a>
           </div>
         </div>
         <div class="stats-bar">
-          <div class="stat-item"><div class="stat-num" style="color:#8B5CF6;">Free</div><div class="stat-lbl">Buyer Consultation</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:var(--blue);">Free</div><div class="stat-lbl">Buyer Consultation</div></div>
           <div class="stat-divider"></div>
-          <div class="stat-item"><div class="stat-num" style="color:#8B5CF6;">CMA</div><div class="stat-lbl">Free Home Valuation</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:var(--blue);">CMA</div><div class="stat-lbl">Free Home Valuation</div></div>
           <div class="stat-divider"></div>
-          <div class="stat-item"><div class="stat-num" style="color:#8B5CF6;">Local</div><div class="stat-lbl">Pacific NW Experts</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:var(--blue);">Local</div><div class="stat-lbl">Pacific NW Experts</div></div>
           <div class="stat-divider"></div>
-          <div class="stat-item"><div class="stat-num" style="color:#8B5CF6;">Full</div><div class="stat-lbl">Service, Start to Close</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:var(--blue);">Full</div><div class="stat-lbl">Service, Start to Close</div></div>
         </div>
       </div>
 
@@ -362,7 +374,7 @@
       <!-- Tab order: Buy & Sell first, Renting second -->
       <div class="vp-mode-tabs">
         <button class="vp-tab active buy" data-vp="vp-buy">🔑 Buying &amp; Selling</button>
-        <button class="vp-tab rent" data-vp="vp-rent">🏠 Renting</button>
+        <button class="vp-tab rent" data-vp="vp-rent">🏠 Renting <span class="coming-soon-badge">Coming Soon</span></button>
       </div>
 
       <!-- BUY comparison (default active) -->
@@ -620,6 +632,7 @@
           m.classList.toggle('active', m.id === 'mode-' + mode);
         });
         document.body.classList.toggle('buy-mode', mode === 'buy');
+        if (typeof Analytics !== 'undefined') Analytics.trackTabSwitch(mode);
 
         // Sync the "Why Harvin Properties" tabs to match the hero toggle
         const vpTarget = mode === 'rent' ? 'vp-rent' : 'vp-buy';

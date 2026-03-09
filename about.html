@@ -155,7 +155,7 @@
 
   <!-- NAVBAR -->
   <nav id="navbar" role="navigation" aria-label="Main navigation">
-    <a href="index2.html" class="nav-brand">
+    <a href="index.html" class="nav-brand">
       <svg class="nav-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="40" height="40" rx="10" fill="#0EA5E9"/>
         <path d="M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z" fill="white"/>
@@ -164,10 +164,12 @@
       <span class="nav-brand-text">Harvin <span>Properties</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="index2.html">Home</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="buy.html">Buy / Sell</a></li>
+      <li><a href="index.html#mode-rent">Rent <span style="font-size:0.6rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);vertical-align:middle;margin-left:3px;">Soon</span></a></li>
       <li><a href="features.html">Features</a></li>
-      <li><a href="index2.html#value-prop">Why Harvin</a></li>
-      <li><a href="index2.html#how-it-works">How It Works</a></li>
+      <li><a href="index.html#value-prop">Why Harvin</a></li>
+      <li><a href="index.html#how-it-works">How It Works</a></li>
       <li><a href="about.html" style="color:var(--blue);font-weight:600;">About</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="admin/index.html" style="color:var(--blue);font-weight:600;">📊 Admin</a></li>
@@ -178,7 +180,9 @@
     </button>
   </nav>
   <div id="mobile-menu" role="menu">
-    <a href="index2.html" role="menuitem">Home</a>
+    <a href="index.html" role="menuitem">Home</a>
+    <a href="buy.html" role="menuitem">Buy / Sell</a>
+    <a href="index.html#mode-rent" role="menuitem">Rent <span style="font-size:0.6rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);margin-left:3px;">Soon</span></a>
     <a href="features.html" role="menuitem">Features</a>
     <a href="about.html" role="menuitem">About</a>
     <a href="contact.html" role="menuitem">Contact</a>
@@ -343,6 +347,52 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); } });
     }, { threshold: 0.1 });
     document.querySelectorAll('.value-card').forEach(el => obs.observe(el));
+  </script>
+
+  <!-- ═══ THEME SWITCHER WIDGET ══════════════════════════════ -->
+  <div id="theme-switcher-fab" aria-label="Change site theme" style="
+    position:fixed; bottom:1.5rem; right:1.5rem; z-index:9000;
+    display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;
+  ">
+    <div id="theme-switcher-panel" style="
+      display:none; flex-direction:column; gap:0.35rem;
+      background:var(--bg-card); border:1px solid var(--border-strong);
+      border-radius:14px; padding:0.6rem; box-shadow:var(--shadow-modal);
+    ">
+      <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);padding:0.1rem 0.3rem 0.3rem;">Site Theme</div>
+      <div style="display:flex;gap:0.4rem;padding:0 0.2rem 0.2rem;">
+        <button onclick="siteSetTheme('ocean')"    title="Ocean (Blue)"          data-st="ocean"    style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#0EA5E9,#38BDF8);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('blaze')"    title="Blaze (Dark Orange)"   data-st="blaze"    style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#1a1a1a,#F97316);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('emerald')"  title="Emerald (Green)"       data-st="emerald"  style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#10B981,#6EE7B7);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('midnight')" title="Midnight (Purple)"     data-st="midnight" style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#1E1B4B,#8B5CF6);transition:all 0.18s;"></button>
+        <button onclick="siteSetTheme('rose')"     title="Rose (Pink)"           data-st="rose"     style="width:28px;height:28px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;background:linear-gradient(135deg,#F43F5E,#FDA4AF);transition:all 0.18s;"></button>
+      </div>
+    </div>
+    <button id="theme-fab-btn" onclick="document.getElementById('theme-switcher-panel').style.display = document.getElementById('theme-switcher-panel').style.display==='flex'?'none':'flex'" aria-label="Toggle theme panel" style="
+      width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+      background:var(--blue);color:#fff;font-size:1.1rem;
+      box-shadow:0 4px 20px var(--blue-dim);transition:all 0.25s;
+      display:flex;align-items:center;justify-content:center;
+    ">🎨</button>
+  </div>
+  <script>
+  (function(){
+    function siteSetTheme(name) {
+      ThemeManager.set(name);
+      document.querySelectorAll('[data-st]').forEach(b => {
+        b.style.borderColor = b.dataset.st === name ? 'var(--text-primary)' : 'transparent';
+        b.style.transform   = b.dataset.st === name ? 'scale(1.18)' : 'scale(1)';
+      });
+    }
+    window.siteSetTheme = siteSetTheme;
+    siteSetTheme(ThemeManager.load());
+    document.addEventListener('click', function(e) {
+      const fab = document.getElementById('theme-switcher-fab');
+      if (fab && !fab.contains(e.target)) {
+        document.getElementById('theme-switcher-panel').style.display = 'none';
+      }
+    });
+  })();
   </script>
 </body>
 </html>

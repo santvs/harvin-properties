@@ -20,8 +20,9 @@ const Analytics = (() => {
         loginAttempts: [],
         registrations: [],
         roleInterest: { tenant: 0, landlord: 0, manager: 0 },
+        tabSwitches: { buy: 0, rent: 0 },
       };
-    } catch { return { pageViews: [], sectionViews: {}, clicks: [], loginAttempts: [], registrations: [], roleInterest: { tenant: 0, landlord: 0, manager: 0 } }; }
+    } catch { return { pageViews: [], sectionViews: {}, clicks: [], loginAttempts: [], registrations: [], roleInterest: { tenant: 0, landlord: 0, manager: 0 }, tabSwitches: { buy: 0, rent: 0 } }; }
   }
 
   function saveData(data) {
@@ -73,6 +74,17 @@ const Analytics = (() => {
     const data = getData();
     data.clicks.push({ label, category, ts: now(), date: todayKey() });
     // Keep last 500 clicks
+    data.clicks = data.clicks.slice(-500);
+    saveData(data);
+  }
+
+  // ── Tab Switch ────────────────────────────────────────────
+
+  function trackTabSwitch(tab) {
+    const data = getData();
+    if (!data.tabSwitches) data.tabSwitches = { buy: 0, rent: 0 };
+    if (data.tabSwitches[tab] !== undefined) data.tabSwitches[tab]++;
+    data.clicks.push({ label: `hero_tab_${tab}`, category: 'tab_switch', ts: now(), date: todayKey() });
     data.clicks = data.clicks.slice(-500);
     saveData(data);
   }
@@ -173,6 +185,7 @@ const Analytics = (() => {
     const totalClicks = data.clicks.length;
     const totalLogins = data.loginAttempts.length;
     const totalRegs = data.registrations.length;
+    const tabSwitches = data.tabSwitches || { buy: 0, rent: 0 };
 
     // Clicks by category
     const clicksByCategory = data.clicks.reduce((acc, c) => {
@@ -202,6 +215,7 @@ const Analytics = (() => {
       topClicks,
       sectionViews,
       roleInterest: data.roleInterest,
+      tabSwitches,
       raw: data,
     };
   }
@@ -210,6 +224,6 @@ const Analytics = (() => {
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  return { init, getReport, trackClick, clearData };
+  return { init, getReport, trackClick, trackTabSwitch, clearData };
 
 })();
