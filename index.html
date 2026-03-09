@@ -244,7 +244,10 @@
     .role-btn-row.cols-3, .role-btn-row.cols-2 { grid-template-columns: repeat(2,1fr); }
     .auth-simple { padding: 1.5rem 1.25rem; }
     .steps-grid { grid-template-columns: 1fr; }
-    .stats-bar { gap: 1.5rem; }
+    /* Stats: force 2x2 grid so columns align perfectly */
+    .stats-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 0; }
+    .stat-divider { display: none; }
+    .stat-item { text-align: center; }
   }
   </style>
 </head>
