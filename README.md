@@ -1,7 +1,10 @@
 # 🏠 Harvin Properties — Website Documentation
 
-> **Your Home, Our Priority**
-> A fully responsive property management website for tenants, landlords, and property managers — with built-in analytics and an admin dashboard.
+> **Buy, Sell, Rent & Manage — All Under One Roof**
+> A fully responsive, full-service real estate website for buyers, sellers, tenants, landlords, and property managers — with built-in analytics and an admin dashboard.
+
+🌐 **Live site:** [harvinproperties.com](http://harvinproperties.com)
+📦 **Repo:** [github.com/santvs/harvin-properties](https://github.com/santvs/harvin-properties)
 
 ---
 
@@ -9,186 +12,221 @@
 
 ```
 HarvinProperties/
-├── index.html          ← Main homepage (open this in your browser)
+├── index.html          ← Legacy homepage (original)
+├── index2.html         ← ✅ MAIN homepage (Buy/Sell toggle, default active)
+├── buy.html            ← Buy & Sell dedicated page (buyer/seller services)
+├── about.html          ← Company story, mission, values, team
+├── contact.html        ← Contact form (mailto-based) with info sidebar
+├── features.html       ← Feature bento grid + pricing tiers
+├── CNAME               ← Custom domain: harvinproperties.com
+├── README.md
 ├── css/
 │   └── styles.css      ← All styling, colours, layout, responsive rules
+├── images/
+│   └── vinutha.png     ← CEO headshot
 ├── js/
-│   ├── config.js       ← Site content: brand name, team, footer links, user types
+│   ├── theme.js        ← ThemeManager: 5 colour palettes, localStorage
+│   ├── config.js       ← Site content: brand, team members, footer, user types
 │   ├── analytics.js    ← Visitor tracking: page views, clicks, section views
 │   └── app.js          ← All site logic: modals, forms, rendering, animations
 └── admin/
-    └── index.html      ← Analytics dashboard (admin view)
+    └── index.html      ← Analytics dashboard (password-protected admin view)
 ```
+
+> **Main homepage is `index2.html`** — this is the file that GitHub Pages and harvinproperties.com serve via the CNAME redirect.
 
 ---
 
-## 🚀 Getting Started
+## 🏗️ Pages Overview
 
-### Open Locally
-1. Navigate to the `HarvinProperties` folder on your computer
-2. Double-click **`index.html`** to open in your browser
-3. No server, no install, no dependencies required — it runs entirely in the browser
+### `index2.html` — Homepage
+The primary landing page with a **Buy & Sell / Rent toggle** in the hero. Buy & Sell is the default active mode.
 
-### Open the Admin Dashboard
-1. From the homepage, click **📊 Analytics** in the navigation bar, **or**
-2. Open `admin/index.html` directly in your browser
+- **Hero toggle** — Switches between Buy & Sell (purple) and Rent (blue) content, auth cards, and stats
+- **Value Proposition** — Tabbed comparison table (Buy & Sell first, Renting second)
+- **How It Works** — Tabbed steps for Buyers, Sellers, Landlords, Tenants, and Managers
+- **CTA Band** — Links to contact and buy pages
+- **Team section** — Rendered dynamically from `config.js`
+
+### `buy.html` — Buy & Sell
+Full-service real estate page covering all four buy-side services:
+- Buyer representation (agent-assisted home search)
+- Seller listing & representation
+- Free home valuation / CMA
+- Mortgage & financing referrals
+
+### `about.html` — About
+Company story, founding vision, mission statement, core values, and the team section.
+
+### `contact.html` — Contact
+Contact form that generates a `mailto:` email pre-filled with form data. Includes a success state, info sidebar (emails, phone, hours), and a map/service area card.
+
+### `features.html` — Features
+Bento-grid feature showcase with tabs: All Features / For Landlords / For Tenants / For Managers / Buy & Sell. Includes a 3-tier pricing section.
+
+### `admin/index.html` — Admin Dashboard
+Login: `admin` / `admin`. Five analytics pages covering traffic, clicks, section views, and auth/role data.
+
+---
+
+## 🎨 Theming
+
+The site ships with **5 colour palettes** managed by `js/theme.js`:
+
+| Theme | Primary Colour | Key Mood |
+|-------|---------------|----------|
+| `ocean` | Sky Blue `#0EA5E9` | Default / clean |
+| `blaze` | Amber `#F59E0B` | Warm / energetic |
+| `emerald` | Green `#10B981` | Fresh / natural |
+| `midnight` | Dark navy | Professional / dark |
+| `rose` | Pink-rose | Modern / friendly |
+
+Switch themes via the palette picker in the navbar. The selected theme is saved to `localStorage` (`hp_site_theme`) and applied on every page load via `ThemeManager.init()` in the `<head>`.
+
+**Buy & Sell accent colour** — Purple (`#8B5CF6`) is used throughout the buy-side experience and is independent of the site theme.
+
+---
+
+## 👥 User Roles
+
+The site supports **five user roles** across two service lines:
+
+### Rent & Manage
+| Role | Icon | Accent | Description |
+|------|------|--------|-------------|
+| **Tenant** | 🏠 | Blue | Finds & rents a home |
+| **Landlord** | 🏢 | Amber | Lists & manages property |
+| **Manager** | 📋 | Green | Manages portfolios for owners |
+
+### Buy & Sell
+| Role | Icon | Accent | Description |
+|------|------|--------|-------------|
+| **Buyer** | 🔑 | Purple | Agent-assisted home search |
+| **Seller** | 🏷️ | Red | Listing, marketing & sale |
 
 ---
 
 ## ✏️ How to Customise Content
 
-All website content lives in **`js/config.js`** — you never need to touch the HTML or CSS for content changes.
+All content lives in **`js/config.js`**.
 
-### Change the Company Name / Tagline
+### Change Company Name / Tagline
 ```js
 const SITE_CONFIG = {
   name: "Harvin Properties",
-  tagline: "Your Home, Our Priority",
-  description: "Harvin Properties connects tenants, landlords, and managers...",
-  heroImage: "https://...",   // URL of the hero background image
-  year: new Date().getFullYear(),
+  tagline: "Buy, Sell, Rent & Manage",
+  description: "Your full-service real estate partner in the Pacific Northwest.",
 };
 ```
 
 ### Update Team Members
-Find the `TEAM_MEMBERS` array in `config.js` and edit or add entries:
 ```js
-{
-  name: "Jane Smith",
-  role: "Head of Operations",
-  bio: "Short bio about this person goes here.",
-  avatar: "JS",           // 2-letter initials shown in the avatar circle
-  accentColor: "#0EA5E9", // Hex colour for this card's accent
-  linkedin: "https://linkedin.com/in/janesmith",
-  twitter: "https://twitter.com/janesmith",
-},
+const TEAM_MEMBERS = [
+  {
+    name: "Vinutha Narayan",
+    role: "CEO & Co-Founder",
+    bio: "Licensed RE/MAX agent with deep Pacific Northwest market expertise.",
+    photo: "images/vinutha.png",   // or null to show initials avatar
+    avatar: "VN",
+    accentColor: "#0EA5E9",
+    linkedin: "https://remax-integrity.com/agents/1964848/Vinutha+Narayana",
+  },
+  // Add more members here
+];
 ```
 
+When `photo` is set, the card renders a `<img>` with `object-fit: cover`. When `photo` is `null`, it shows a coloured circle with the `avatar` initials.
+
 ### Update Footer Links
-Find the `FOOTER_CONFIG` object in `config.js`:
 ```js
 const FOOTER_CONFIG = {
   columns: [
-    { title: "Platform", links: ["Features", "Pricing", ...] },
-    { title: "For Tenants", links: ["Find a Home", ...] },
-    ...
+    { title: "Services", links: ["Buy a Home", "Sell a Home", "Rent", "Property Management"] },
+    { title: "Company", links: ["About", "Contact", "Features"] },
   ],
   social: [
-    { name: "Twitter", icon: "𝕏", url: "https://twitter.com/harvinproperties" },
     { name: "LinkedIn", icon: "in", url: "https://linkedin.com/company/harvin" },
   ],
 };
 ```
 
 ### Change Brand Colours
-Open `css/styles.css` and edit the CSS variables at the top:
 ```css
+/* css/styles.css */
 :root {
-  --blue:       #0EA5E9;  /* Primary brand colour */
-  --blue-dark:  #0284C7;  /* Hover state */
-  --amber:      #F59E0B;  /* Landlord accent */
-  --bg:         #F8FAFF;  /* Page background */
-  --text-primary: #0F172A; /* Main text colour */
+  --blue:       #0EA5E9;   /* Primary brand / rent accent */
+  --blue-dark:  #0284C7;
+  --bg:         #F8FAFF;
+  --text-primary: #0F172A;
 }
 ```
 
----
-
-## 🔐 User Roles & Login / Registration
-
-The site supports **three distinct user types**, each with their own login and registration forms:
-
-| Role | Icon | Accent Colour | Unique Fields |
-|------|------|--------------|---------------|
-| **Tenant** | 🏠 | Sky Blue | Move-in date, current address |
-| **Landlord** | 🏢 | Amber | Company name, Tax ID, property count |
-| **Property Manager** | 📋 | Green | Firm name, license number, licensed state |
-
-### To add or remove form fields for a role
-Edit the `loginFields` or `registerFields` arrays inside the relevant role in `config.js`:
-```js
-tenant: {
-  registerFields: [
-    { id: "firstName", type: "text", label: "First Name", placeholder: "Jane", required: true },
-    // Add a new field:
-    { id: "petName", type: "text", label: "Pet Name (if applicable)", placeholder: "Buddy", required: false },
-  ]
-}
-```
+The buy-side purple (`#8B5CF6`) is hardcoded inline throughout `index2.html` and `buy.html` — search for `#8B5CF6` to update it.
 
 ---
 
 ## 📊 Analytics System
 
-The site automatically tracks visitor behaviour using the built-in analytics module. All data is stored in the visitor's browser (`localStorage`) — no external service or server needed.
+All tracking uses the browser's `localStorage` — no external service or server needed.
 
-### What is tracked
+### What Is Tracked
 | Event | Description |
 |-------|-------------|
-| **Page Views** | Every time someone loads the homepage |
-| **Unique Sessions** | Estimated unique visitors per day |
-| **Section Views** | Which sections visitors scroll to (Hero, Team, Footer) |
-| **Link & Button Clicks** | Navigation, auth pills, footer links, social links |
-| **Login Attempts** | How many times each role's Sign In was clicked |
-| **Registrations** | How many times each role's Register was clicked |
-| **Role Interest** | Which role (Tenant / Landlord / Manager) gets the most engagement |
+| **Page Views** | Every page load |
+| **Unique Sessions** | Estimated daily unique visitors |
+| **Section Views** | Which sections users scroll to |
+| **Link & Button Clicks** | Nav, auth pills, footer links, social links |
+| **Login / Register Attempts** | Per role |
+| **Role Interest** | Which role gets the most engagement |
 
-### Admin Dashboard Pages
-Open `admin/index.html` to access:
-- **Dashboard** — Overview stats, 14-day bar chart, top clicks, role interest
-- **Traffic** — Daily page views and sessions table
-- **Clicks** — Full click log, category breakdown donut chart
-- **Section Views** — Engagement bar chart per section
-- **Auth & Roles** — Login vs registration counts, role interest breakdown
+### Admin Dashboard
+Open `admin/index.html` → login `admin` / `admin`:
+- **Dashboard** — Overview stats, 14-day chart, top clicks
+- **Traffic** — Daily page views and sessions
+- **Clicks** — Full click log + category donut chart
+- **Section Views** — Engagement per section
+- **Auth & Roles** — Login vs register counts, role breakdown
 
-### Clearing Analytics Data
-In the admin dashboard, click the **Clear Data** button (top right) to wipe all stored analytics. This cannot be undone.
-
-> ⚠️ **Note:** Because analytics data is stored in `localStorage`, it is per-browser and per-device. If you want shared analytics across all visitors, you will need a backend server. Ask your developer or contact us to upgrade.
+> ⚠️ Analytics data is per-browser/device. For shared analytics across all visitors, a backend server is required.
 
 ---
 
-## 🌐 Deploying to Your Domain (GoDaddy)
+## 🌐 Deployment
 
-### Option A — Netlify (Recommended, Free)
-1. Go to [netlify.com](https://netlify.com) and sign up
-2. Drag the entire `HarvinProperties` folder onto the Netlify dashboard
-3. Netlify gives you a live URL instantly
-4. Go to **Domain Settings → Add custom domain** → enter your GoDaddy domain
-5. Follow Netlify's instructions to update your GoDaddy nameservers
+**Live on:** [harvinproperties.com](http://harvinproperties.com) via GitHub Pages
 
-### Option B — GoDaddy Web Hosting
-1. Log in to GoDaddy → **My Products → Web Hosting → Manage**
-2. Open **cPanel → File Manager → public_html**
-3. Upload all files from the `HarvinProperties` folder into `public_html`
-4. Your domain will automatically serve the site
+### GitHub Pages Setup
+- Repo: `github.com/santvs/harvin-properties` (public, `main` branch)
+- `CNAME` file contains: `harvinproperties.com`
+- GitHub Pages serves `index.html` by default — the main page is `index2.html`, so either rename it to `index.html` or keep the original `index.html` as a redirect
 
-### Option C — GitHub Pages (Free)
-1. Create a free account at [github.com](https://github.com)
-2. Create a new public repository called `harvin-properties`
-3. Upload all project files
-4. Go to **Settings → Pages → Branch: main → Save**
-5. Add your GoDaddy domain under **Custom domain**
-6. In GoDaddy DNS, add these A records pointing to GitHub:
-   - `185.199.108.153`
-   - `185.199.109.153`
-   - `185.199.110.153`
-   - `185.199.111.153`
+### GoDaddy DNS Records
+| Type | Host | Value | TTL |
+|------|------|-------|-----|
+| A | @ | 185.199.108.153 | 600 |
+| A | @ | 185.199.109.153 | 600 |
+| A | @ | 185.199.110.153 | 600 |
+| A | @ | 185.199.111.153 | 600 |
+| CNAME | www | santvs.github.io | 600 |
+
+### Enable HTTPS
+In GitHub → **Settings → Pages → Enforce HTTPS** ✅ (enable after DNS propagates)
 
 ---
 
-## 🛠️ Making Changes — Quick Reference
+## 🛠️ Quick Reference
 
-| Task | File to Edit |
-|------|-------------|
-| Change company name or tagline | `js/config.js` → `SITE_CONFIG` |
-| Add/remove team members | `js/config.js` → `TEAM_MEMBERS` |
+| Task | Where |
+|------|-------|
+| Edit company name / tagline | `js/config.js` → `SITE_CONFIG` |
+| Add / remove team members | `js/config.js` → `TEAM_MEMBERS` |
 | Change footer links | `js/config.js` → `FOOTER_CONFIG` |
-| Change colours / fonts | `css/styles.css` → `:root` variables |
-| Add a form field to registration | `js/config.js` → role's `registerFields` |
-| Change hero background image | `js/config.js` → `SITE_CONFIG.heroImage` |
-| View visitor analytics | Open `admin/index.html` |
-| Add a new page section | Edit `index.html` + `css/styles.css` |
+| Change brand colours | `css/styles.css` → `:root` |
+| Change buy-side purple | Search `#8B5CF6` in `index2.html`, `buy.html` |
+| Switch default hero mode | `index2.html` → `<body class="buy-mode">` and first `.mode-btn.active` |
+| Add a team member photo | Drop image in `images/`, set `photo:` in `config.js` |
+| View analytics | Open `admin/index.html` |
+| Clear analytics data | Admin → **Clear Data** button (top right) |
 
 ---
 
@@ -196,21 +234,39 @@ In the admin dashboard, click the **Clear Data** button (top right) to wipe all 
 
 | Layer | Technology |
 |-------|-----------|
-| Markup | HTML5 (semantic, accessible) |
+| Markup | HTML5 (semantic, accessible, ARIA-labelled) |
 | Styling | CSS3 with custom properties (no frameworks) |
-| Logic | Vanilla JavaScript (ES6+, no dependencies) |
+| Logic | Vanilla JavaScript ES6+ (zero dependencies) |
 | Fonts | Google Fonts — Playfair Display + Plus Jakarta Sans |
-| Analytics | Custom built, localStorage-based |
-| Hosting | Static files — works anywhere |
+| Theming | Custom ThemeManager (5 palettes, localStorage) |
+| Analytics | Custom-built, localStorage-based |
+| Hosting | GitHub Pages (static) |
 
 ---
 
-## 📞 Support & Next Steps
+## 👨‍💼 Team
 
-- **Add a contact form** — Integrate with [Formspree](https://formspree.io) (free) to receive emails from your site
-- **Real backend** — Connect to a database for real user login/registration
-- **Shared analytics** — Upgrade to server-side analytics (e.g. Plausible, Fathom, or a custom Node.js backend)
-- **Blog / listings** — Add a property listings page pulling from a CMS
+| Name | Role |
+|------|------|
+| **Vinutha Narayan** | CEO & Co-Founder — Licensed real estate agent |
+| **Santosh** | CTO & Co-Founder — Engineering & product |
+| **Disha** | Head of Product |
+
+---
+
+## 📞 Contact & Support
+
+**Email:** hello@harvinproperties.com · listings@harvinproperties.com
+**Phone:** (425) 555-0100 · Mon–Fri 9AM–6PM PT · Sat 10AM–4PM PT
+**Service Area:** King & Pierce County, Pacific Northwest WA
+
+### Roadmap / Next Steps
+- [ ] Enable HTTPS on GitHub Pages
+- [ ] Add last names, bios, and photos for Santosh and Disha
+- [ ] Connect contact form to a real backend (e.g. Formspree, Resend)
+- [ ] Build out buy-side agent profile pages
+- [ ] Add property search / listings page
+- [ ] Upgrade analytics to server-side (Plausible, Fathom, or custom)
 
 ---
 
