@@ -487,7 +487,7 @@ button { cursor: pointer; font-family: var(--font-body); border: none; }
 /* ============================================================
    SECTIONS
    ============================================================ */
-section { padding: 7rem 2rem; }
+section { padding: 3.5rem 2rem; }
 .container { max-width: 1200px; margin: 0 auto; }
 
 .section-header {
@@ -749,7 +749,7 @@ footer {
 @media (max-width: 600px) {
   #navbar { padding: 0 1.25rem; }
   .nav-brand-text { font-size: 1.1rem; }
-  section { padding: 4.5rem 1.25rem; }
+  section { padding: 2.5rem 1.25rem; }
   .auth-card { padding: 1.5rem 1.25rem; }
   .modal-body { padding: 1.25rem 1.25rem 1.75rem; }
   .modal-header { padding: 1.25rem 1.25rem 0.875rem; }
