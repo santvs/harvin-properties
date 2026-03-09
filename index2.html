@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Harvin Properties — Buy, Sell, Rent or Manage. Your full-service real estate platform in the Pacific Northwest." />
   <title>Harvin Properties — Buy, Sell & Rent</title>
+
+  <!-- Open Graph / WhatsApp / iMessage / Slack preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://harvinproperties.com/" />
+  <meta property="og:title"       content="Harvin Properties — Buy, Sell & Rent" />
+  <meta property="og:description" content="Your full-service real estate partner in the Pacific Northwest. Buy, sell, rent or manage — all under one roof." />
+  <meta property="og:image"       content="https://harvinproperties.com/images/og-preview.png" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name"   content="Harvin Properties" />
+  <!-- Twitter / X card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Harvin Properties — Buy, Sell & Rent" />
+  <meta name="twitter:description" content="Your full-service real estate partner in the Pacific Northwest." />
+  <meta name="twitter:image"       content="https://harvinproperties.com/images/og-preview.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='10' fill='%230EA5E9'/><path d='M20 8 L34 20 L30 20 L30 32 L24 32 L24 24 L16 24 L16 32 L10 32 L10 20 L6 20 Z' fill='white'/></svg>" />
   <script src="js/theme.js"></script>
   <script>ThemeManager.init();</script>
@@ -204,8 +219,15 @@
     .auth-action-row { grid-template-columns: 1fr; }
     .steps-grid { grid-template-columns: 1fr 1fr; }
     .steps-grid::before { display: none; }
-    .comparison-header, .comparison-row { grid-template-columns: 1fr 1fr; }
+    /* Mobile: 2-col table — hide feature label col, show only Harvin + Traditional */
+    .comparison-header,
+    .comparison-row { grid-template-columns: 1fr 1fr; }
+    .comp-col-head:first-child,
     .comp-cell:first-child { display: none; }
+    /* Dim traditional so Harvin clearly wins */
+    .comp-col-head.traditional,
+    .comp-cell.trad-cell { opacity: 0.65; }
+    .comp-col-head.traditional { font-size: 0.7rem; color: var(--text-muted); }
     .stat-divider { display: none; }
   }
   @media (max-width: 600px) {
@@ -682,6 +704,25 @@
         document.getElementById(tab.dataset.panel).classList.add('active');
       });
     });
+
+    /* ── Mobile: swap comparison columns so Harvin is always LEFT ── */
+    function swapComparisonCols() {
+      const isMobile = window.innerWidth <= 900;
+      document.querySelectorAll('.comparison-header, .comparison-row').forEach(row => {
+        const harvin = row.querySelector('.comp-col-head.harvin, .comp-cell.harvin-cell');
+        const trad   = row.querySelector('.comp-col-head.traditional, .comp-cell.trad-cell');
+        const feat   = row.children[0]; // feature label (hidden on mobile)
+        if (!harvin || !trad) return;
+        if (isMobile) {
+          // Ensure order: [feat(hidden)], [harvin], [trad]
+          if (harvin.previousElementSibling !== feat) {
+            row.insertBefore(harvin, trad);
+          }
+        }
+      });
+    }
+    swapComparisonCols();
+    window.addEventListener('resize', swapComparisonCols);
 
     /* ── Scroll animations ── */
     const obs = new IntersectionObserver(entries => {

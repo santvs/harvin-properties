@@ -214,8 +214,14 @@
     .auth-action-row { grid-template-columns: 1fr; }
     .steps-grid { grid-template-columns: 1fr 1fr; }
     .steps-grid::before { display: none; }
-    .comparison-header, .comparison-row { grid-template-columns: 1fr 1fr; }
+    /* Mobile: 2-col table — Harvin LEFT, Traditional RIGHT (dimmed) */
+    .comparison-header,
+    .comparison-row { grid-template-columns: 1fr 1fr; }
+    .comp-col-head:first-child,
     .comp-cell:first-child { display: none; }
+    .comp-col-head.traditional,
+    .comp-cell.trad-cell { opacity: 0.65; }
+    .comp-col-head.traditional { font-size: 0.7rem; color: var(--text-muted); }
     .stat-divider { display: none; }
   }
   @media (max-width: 600px) {
@@ -695,6 +701,21 @@
         document.getElementById(tab.dataset.panel).classList.add('active');
       });
     });
+
+    /* ── Mobile: swap comparison columns so Harvin is always LEFT ── */
+    function swapComparisonCols() {
+      const isMobile = window.innerWidth <= 900;
+      document.querySelectorAll('.comparison-header, .comparison-row').forEach(row => {
+        const harvin = row.querySelector('.comp-col-head.harvin, .comp-cell.harvin-cell');
+        const trad   = row.querySelector('.comp-col-head.traditional, .comp-cell.trad-cell');
+        if (!harvin || !trad) return;
+        if (isMobile && trad.compareDocumentPosition(harvin) & Node.DOCUMENT_POSITION_FOLLOWING) {
+          row.insertBefore(harvin, trad);
+        }
+      });
+    }
+    swapComparisonCols();
+    window.addEventListener('resize', swapComparisonCols);
 
     /* ── Scroll animations ── */
     const obs = new IntersectionObserver(entries => {
