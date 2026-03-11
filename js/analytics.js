@@ -21,8 +21,10 @@ const Analytics = (() => {
         registrations: [],
         roleInterest: { tenant: 0, landlord: 0, manager: 0 },
         tabSwitches: { buy: 0, rent: 0 },
+        locationVisits: [],
+        contactEvents: [],
       };
-    } catch { return { pageViews: [], sectionViews: {}, clicks: [], loginAttempts: [], registrations: [], roleInterest: { tenant: 0, landlord: 0, manager: 0 }, tabSwitches: { buy: 0, rent: 0 } }; }
+    } catch { return { pageViews: [], sectionViews: {}, clicks: [], loginAttempts: [], registrations: [], roleInterest: { tenant: 0, landlord: 0, manager: 0 }, tabSwitches: { buy: 0, rent: 0 }, locationVisits: [], contactEvents: [] }; }
   }
 
   function saveData(data) {
@@ -106,6 +108,54 @@ const Analytics = (() => {
     saveData(data);
   }
 
+  // ── Contact Form Tracking ────────────────────────────────────
+
+  function trackContactEvent(type, detail) {
+    const data = getData();
+    if (!data.contactEvents) data.contactEvents = [];
+    data.contactEvents.push({ type, detail: detail || {}, ts: now(), date: todayKey() });
+    // Keep last 300 contact events
+    data.contactEvents = data.contactEvents.slice(-300);
+    saveData(data);
+  }
+
+  // ── Location Tracking ──────────────────────────────────────
+
+  function trackLocation() {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
+        const geo = await res.json();
+        const a = geo.address || {};
+        const city    = a.city || a.town || a.village || a.county || 'Unknown';
+        const state   = a.state || '';
+        const zip     = a.postcode || '';
+        const country = a.country_code ? a.country_code.toUpperCase() : '';
+        const label   = [city, state].filter(Boolean).join(', ');
+
+        const data = getData();
+        if (!data.locationVisits) data.locationVisits = [];
+        const existing = data.locationVisits.find(l => l.zip === zip && l.city === city);
+        if (existing) {
+          existing.count++;
+          existing.lastSeen = todayKey();
+          if (!existing.dates) existing.dates = [];
+          existing.dates.push(todayKey());
+          existing.dates = existing.dates.slice(-60);
+        } else {
+          data.locationVisits.push({ city, state, zip, country, label, count: 1, firstSeen: todayKey(), lastSeen: todayKey(), dates: [todayKey()] });
+        }
+        data.locationVisits = data.locationVisits.slice(-200);
+        saveData(data);
+      } catch(e) {}
+    }, () => {}, { timeout: 8000 });
+  }
+
   // ── Init observers ────────────────────────────────────────
 
   function initSectionObserver() {
@@ -163,6 +213,7 @@ const Analytics = (() => {
 
   function init() {
     trackPageView();
+    trackLocation();
     initSectionObserver();
     initClickTracking();
   }
@@ -224,6 +275,6 @@ const Analytics = (() => {
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  return { init, getReport, trackClick, trackTabSwitch, clearData };
+  return { init, getReport, trackClick, trackTabSwitch, clearData, getData, trackContactEvent };
 
 })();

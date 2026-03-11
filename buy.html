@@ -267,7 +267,7 @@
       <li><a href="index.html#mode-rent">Rent <span style="font-size:0.6rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);vertical-align:middle;margin-left:3px;">Soon</span></a></li>
       <li><a href="features.html">Features</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact Us</a></li>
+      <li><a href="contact.html" class="nav-contact-cta">✉️ Contact Us</a></li>
       <li><a href="admin/index.html" style="color:var(--blue);font-weight:600;">📊 Admin</a></li>
       <li><a href="#" class="nav-cta user-type-pill" data-type="tenant" data-mode="login">Sign In</a></li>
     </ul>
@@ -281,7 +281,7 @@
     <a href="index.html#mode-rent" role="menuitem">Rent <span style="font-size:0.6rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);margin-left:3px;">Soon</span></a>
     <a href="features.html" role="menuitem">Features</a>
     <a href="about.html" role="menuitem">About</a>
-    <a href="contact.html" role="menuitem">Contact</a>
+    <a href="contact.html" role="menuitem">✉️ Contact Us</a>
     <a href="#" role="menuitem" class="nav-cta user-type-pill" data-type="tenant" data-mode="login" style="text-align:center;">Sign In</a>
   </div>
 
@@ -537,6 +537,34 @@
   <script src="js/config.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/app.js"></script>
+
+  <!-- ═══ FLOATING CONTACT FAB ════════════════════════════════ -->
+  <div id="contact-fab" style="position:fixed;bottom:5.5rem;right:1.5rem;z-index:8999;display:flex;flex-direction:column;align-items:flex-end;gap:0;">
+    <div id="contact-fab-card" style="display:none;flex-direction:column;gap:0;background:var(--bg-card);border:1px solid var(--border-strong);border-radius:18px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.18),0 2px 8px var(--blue-dim);width:240px;margin-bottom:0.6rem;transform:translateY(8px);opacity:0;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1),opacity 0.18s ease;">
+      <div style="background:var(--blue);padding:1rem 1.1rem 0.85rem;">
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.75);margin-bottom:0.25rem;">Get in Touch</div>
+        <div style="font-size:1rem;font-weight:700;color:#fff;line-height:1.25;">Harvin Properties</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.82);margin-top:0.15rem;">We reply within 1 business day</div>
+      </div>
+      <div style="padding:0.85rem 1.1rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <a href="tel:+19016511035" onclick="if(typeof Analytics!=='undefined')Analytics.trackClick('contact_fab_phone','contact_fab');" style="display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;font-weight:600;color:var(--text-primary);text-decoration:none;padding:0.5rem 0.65rem;border-radius:9px;background:var(--bg-subtle);border:1px solid var(--border-strong);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)';" onmouseout="this.style.borderColor='';this.style.color='';">
+          <span style="font-size:1rem;">📞</span><span>901-651-1035</span>
+        </a>
+        <a href="mailto:hello@harvinproperties.com" onclick="if(typeof Analytics!=='undefined')Analytics.trackClick('contact_fab_email','contact_fab');" style="display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;font-weight:600;color:var(--text-primary);text-decoration:none;padding:0.5rem 0.65rem;border-radius:9px;background:var(--bg-subtle);border:1px solid var(--border-strong);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)';" onmouseout="this.style.borderColor='';this.style.color='';">
+          <span style="font-size:1rem;">✉️</span><span>hello@harvinproperties.com</span>
+        </a>
+        <a href="contact.html" onclick="if(typeof Analytics!=='undefined')Analytics.trackClick('contact_fab_form','contact_fab');" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;font-size:0.875rem;font-weight:700;color:#fff;text-decoration:none;padding:0.65rem;border-radius:9px;background:var(--blue);box-shadow:0 3px 12px var(--blue-dim);transition:all 0.15s;" onmouseover="this.style.filter='brightness(1.08)';this.style.transform='translateY(-1px)';" onmouseout="this.style.filter='';this.style.transform='';">
+          Send a Message &nbsp;→
+        </a>
+      </div>
+    </div>
+    <div style="position:relative;">
+      <div style="position:absolute;inset:-6px;border-radius:50%;background:var(--blue-dim);animation:contactPulse 2.2s ease-in-out infinite;pointer-events:none;"></div>
+      <button id="contact-fab-btn" aria-label="Contact Harvin Properties" onclick="toggleContactFab()" style="width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;background:var(--blue);color:#fff;font-size:1.25rem;box-shadow:0 4px 20px var(--blue-dim);transition:all 0.22s;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;">💬</button>
+    </div>
+  </div>
+  <style>@keyframes contactPulse{0%,100%{transform:scale(1);opacity:0.6;}50%{transform:scale(1.35);opacity:0;}}</style>
+  <script>(function(){var open=false,card=document.getElementById('contact-fab-card'),btn=document.getElementById('contact-fab-btn');function toggleContactFab(){open=!open;if(open){card.style.display='flex';setTimeout(function(){card.style.transform='translateY(0)';card.style.opacity='1';},10);btn.style.transform='rotate(15deg) scale(1.08)';if(typeof Analytics!=='undefined')Analytics.trackClick('contact_fab_open','contact_fab');}else{card.style.transform='translateY(8px)';card.style.opacity='0';setTimeout(function(){card.style.display='none';},200);btn.style.transform='';}}window.toggleContactFab=toggleContactFab;document.addEventListener('click',function(e){if(open&&!document.getElementById('contact-fab').contains(e.target))toggleContactFab();});})();<\/script>
 
   <!-- ═══ THEME SWITCHER WIDGET ══════════════════════════════ -->
   <div id="theme-switcher-fab" aria-label="Change site theme" style="

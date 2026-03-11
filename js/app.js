@@ -110,9 +110,23 @@ function renderField(field) {
     </div>`;
 }
 
+function renderFieldInline(field) {
+  return `
+    <div class="form-group" style="flex:1;min-width:0;">
+      <label for="field-${field.id}" class="form-label">
+        ${field.label}${field.required ? '<span class="required-dot" aria-hidden="true"> *</span>' : ""}
+      </label>
+      <input id="field-${field.id}" type="${field.type}" name="${field.id}"
+        placeholder="${field.placeholder}" ${field.required ? "required" : ""}
+        class="form-input" autocomplete="${getAutocomplete(field.id)}" />
+      <span class="field-error" id="err-${field.id}" role="alert"></span>
+    </div>`;
+}
+
 function getAutocomplete(fieldId) {
   return { email:"email", password:"current-password", confirmPassword:"new-password",
-    firstName:"given-name", lastName:"family-name", phone:"tel", currentAddress:"street-address" }[fieldId] || "off";
+    firstName:"given-name", lastName:"family-name", phone:"tel", currentAddress:"street-address",
+    city:"address-level2", state:"address-level1", zipcode:"postal-code" }[fieldId] || "off";
 }
 
 // ── Validation ─────────────────────────────────────────────

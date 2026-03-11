@@ -440,6 +440,78 @@ body {
 
 .last-updated { font-size:0.72rem; color:var(--a-text3); margin-top:1.5rem; text-align:right; }
 
+/* ── Date Filter Bar ── */
+.date-filter-bar {
+  display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;
+  background:var(--a-card); border:1px solid var(--a-border);
+  border-radius:var(--radius); padding:0.75rem 1.1rem;
+  margin-bottom:1.5rem; box-shadow:var(--a-shadow);
+}
+
+.date-filter-label {
+  font-size:0.72rem; font-weight:700; letter-spacing:0.07em;
+  text-transform:uppercase; color:var(--a-text3); margin-right:0.25rem;
+  white-space:nowrap;
+}
+
+.date-filter-btn {
+  font-family:var(--font); font-size:0.78rem; font-weight:600;
+  padding:0.32rem 0.85rem; border-radius:100px;
+  border:1.5px solid var(--a-border);
+  background:transparent; color:var(--a-text2);
+  cursor:pointer; transition:all 0.15s ease; white-space:nowrap;
+}
+
+.date-filter-btn:hover { border-color:var(--a-primary); color:var(--a-primary); }
+.date-filter-btn.active { background:var(--a-primary); border-color:var(--a-primary); color:#fff; }
+
+.date-range-inputs {
+  display:flex; align-items:center; gap:0.4rem; margin-left:auto;
+  flex-wrap:wrap;
+}
+
+.date-range-inputs input[type="date"] {
+  font-family:var(--font); font-size:0.78rem; font-weight:500;
+  padding:0.28rem 0.65rem; border-radius:8px;
+  border:1.5px solid var(--a-border);
+  background:var(--a-bg); color:var(--a-text);
+  outline:none; cursor:pointer; transition:border-color 0.15s;
+}
+
+.date-range-inputs input[type="date"]:focus { border-color:var(--a-primary); }
+.date-range-sep { font-size:0.78rem; color:var(--a-text3); font-weight:600; }
+
+.date-range-apply {
+  font-family:var(--font); font-size:0.75rem; font-weight:700;
+  padding:0.32rem 0.75rem; border-radius:8px;
+  background:var(--a-primary); border:none; color:#fff;
+  cursor:pointer; transition:background 0.15s;
+}
+
+.date-range-apply:hover { background:var(--a-primary-dark); }
+.date-filter-chip {
+  font-size:0.7rem; font-weight:700; padding:0.22rem 0.65rem;
+  border-radius:100px; background:var(--a-primary-dim); color:var(--a-primary);
+  border:1px solid rgba(14,165,233,0.2); margin-left:0.25rem;
+}
+
+/* ── Location Page ── */
+.location-grid { display:grid; grid-template-columns:2fr 1fr; gap:1rem; margin-bottom:1rem; }
+
+.location-table-wrap { overflow-x:auto; }
+
+.location-badge {
+  display:inline-flex; align-items:center; gap:0.3rem;
+  font-size:0.68rem; font-weight:700; padding:0.15rem 0.5rem;
+  border-radius:100px; background:var(--a-primary-dim); color:var(--a-primary);
+}
+
+.zip-tag {
+  font-family:monospace; font-size:0.72rem; font-weight:600;
+  background:var(--a-bg2); color:var(--a-text2);
+  padding:0.12rem 0.45rem; border-radius:5px; border:1px solid var(--a-border);
+}
+
 /* ── Responsive ── */
 @media (max-width:768px) {
   .sidebar { display:none; }
@@ -539,6 +611,13 @@ body {
       <button class="sidebar-link" onclick="showPage('auth',this)">
         <span class="sidebar-icon">👥</span> Auth & Roles
       </button>
+      <button class="sidebar-link" onclick="showPage('locations',this)">
+        <span class="sidebar-icon">📍</span> Locations
+      </button>
+      <span class="sidebar-label">Conversions</span>
+      <button class="sidebar-link" onclick="showPage('contact',this)">
+        <span class="sidebar-icon">✉️</span> Contact Form
+      </button>
       <div class="sidebar-footer">
         <div class="sidebar-user">
           <div class="sidebar-avatar">A</div>
@@ -559,6 +638,7 @@ body {
           <div class="page-title">Dashboard Overview</div>
           <div class="page-subtitle">All-time metrics from visitor interactions on Harvin Properties</div>
         </div>
+        <div id="overview-date-filter"></div>
         <div class="stat-grid" id="overview-stats"></div>
         <div class="chart-grid">
           <div class="card">
@@ -595,6 +675,7 @@ body {
           <div class="page-title">Traffic</div>
           <div class="page-subtitle">Daily page views and unique sessions</div>
         </div>
+        <div id="traffic-date-filter"></div>
         <div class="card" style="margin-bottom:1rem;">
           <div class="card-title">Daily Page Views (Last 14 Days)</div>
           <div class="bar-chart" id="traffic-chart" style="height:180px;"></div>
@@ -614,6 +695,7 @@ body {
           <div class="page-title">Click Tracking</div>
           <div class="page-subtitle">What visitors are clicking across the site</div>
         </div>
+        <div id="clicks-date-filter"></div>
         <div class="chart-grid" style="margin-bottom:1rem;">
           <div class="card">
             <div class="card-title">Top Clicks</div>
@@ -651,6 +733,72 @@ body {
         <div class="card" style="margin-top:1rem;">
           <div class="card-title">Tab Switch History <span class="card-badge" id="tab-total-badge">0 switches</span></div>
           <div id="tab-chart" style="height:160px;margin-top:0.5rem;"></div>
+        </div>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <div class="page" id="page-contact">
+        <div class="page-header">
+          <div class="page-title">Contact Form Analytics</div>
+          <div class="page-subtitle">Visits, form starts, field engagement, submissions and drop-offs</div>
+        </div>
+        <div id="contact-date-filter"></div>
+        <div class="stat-grid" id="contact-stats"></div>
+        <div class="chart-grid" style="margin-bottom:1rem;">
+          <div class="card">
+            <div class="card-title">Daily Contact Activity (Last 14 Days)</div>
+            <div class="bar-chart" id="contact-bar-chart" style="height:160px;"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Inquiries by Role</div>
+            <div id="contact-role-donut"></div>
+          </div>
+        </div>
+        <div class="chart-grid" style="margin-bottom:1rem;">
+          <div class="card">
+            <div class="card-title">Field Engagement <span class="card-badge" id="contact-fields-badge">Focus counts</span></div>
+            <div class="section-bars" id="contact-field-bars"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">How Visitors Found Us</div>
+            <div id="contact-source-donut"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent Submissions Log <span class="card-badge" id="contact-log-badge">0 entries</span></div>
+          <table class="data-table" id="contact-log-table">
+            <thead><tr><th>Date &amp; Time</th><th>Event</th><th>Role</th><th>Source</th><th>Has Phone</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- LOCATIONS -->
+      <div class="page" id="page-locations">
+        <div class="page-header">
+          <div class="page-title">Visitor Locations</div>
+          <div class="page-subtitle">Geographic breakdown of site visitors — city, state &amp; zip</div>
+        </div>
+        <div id="locations-date-filter"></div>
+        <div class="stat-grid" id="location-stats"></div>
+        <div class="location-grid">
+          <div class="card">
+            <div class="card-title">Visits by Location <span class="card-badge" id="loc-total-badge">0 locations</span></div>
+            <div class="location-table-wrap">
+              <table class="data-table" id="locations-table">
+                <thead><tr><th>#</th><th>City</th><th>State</th><th>Zip</th><th>Visits</th><th>Last Seen</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Top Cities</div>
+            <div id="location-donut"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1rem;">
+          <div class="card-title">Daily Visits by Location (Last 14 Days)</div>
+          <div class="bar-chart" id="location-bar-chart" style="height:160px;"></div>
         </div>
       </div>
 
@@ -873,7 +1021,9 @@ function makeDonut(containerId, segments) {
 
 /* ── RENDER PAGES ───────────────────────────────────────── */
 function renderPage(name) {
-  const r = Analytics.getReport();
+  if (name==='locations') { renderLocations(); return; }
+  if (name==='contact')   { renderContact();   return; }
+  const r = getFilteredReport ? getFilteredReport() : Analytics.getReport();
   if      (name==='overview') renderOverview(r);
   else if (name==='traffic')  renderTraffic(r);
   else if (name==='clicks')   renderClicks(r);
@@ -883,6 +1033,7 @@ function renderPage(name) {
 }
 
 function renderOverview(r) {
+  buildFilterBar('overview-date-filter','overview');
   document.getElementById('overview-stats').innerHTML = `
     <div class="stat-card" style="--stat-color:var(--a-primary)">
       <div class="stat-icon">👁️</div><div class="stat-label">Total Page Views</div>
@@ -933,12 +1084,14 @@ function renderOverview(r) {
 }
 
 function renderTraffic(r) {
+  buildFilterBar('traffic-date-filter','traffic');
   makeBarChart('traffic-chart',r.dailyViews.map(d=>({label:fmtDate(d.date),shortLabel:d.date.slice(5),value:d.count})),180);
   document.querySelector('#traffic-table tbody').innerHTML=[...r.dailyViews].reverse().map(d=>`
     <tr><td>${fmtDate(d.date)}</td><td>${d.count}</td><td>${d.sessions}</td></tr>`).join('');
 }
 
 function renderClicks(r) {
+  buildFilterBar('clicks-date-filter','clicks');
   const tbody=document.querySelector('#clicks-table tbody');
   const catColors={navigation:'#0EA5E9',auth:'#10B981',modal:'#F59E0B',footer:'#8B5CF6',social:'#EF4444',general:'#94A3B8'};
   if(!r.topClicks.length){
@@ -1053,6 +1206,219 @@ function renderAuth(r) {
     {label:'Login Clicks',value:r.totalLogins},
     {label:'Register Clicks',value:r.totalRegs},
   ]);
+}
+
+/* ── DATE FILTER STATE ──────────────────────────── */
+const DATE_FILTER = { preset: 'all', from: null, to: null };
+function todayISO() { return new Date().toISOString().slice(0,10); }
+function getFilterRange() {
+  const today = todayISO();
+  if (DATE_FILTER.preset==='today') return { from:today, to:today };
+  if (DATE_FILTER.preset==='7d') { const d=new Date(); d.setDate(d.getDate()-6); return { from:d.toISOString().slice(0,10), to:today }; }
+  if (DATE_FILTER.preset==='30d') { const d=new Date(); d.setDate(d.getDate()-29); return { from:d.toISOString().slice(0,10), to:today }; }
+  if (DATE_FILTER.preset==='90d') { const d=new Date(); d.setDate(d.getDate()-89); return { from:d.toISOString().slice(0,10), to:today }; }
+  if (DATE_FILTER.preset==='custom' && DATE_FILTER.from && DATE_FILTER.to) return { from:DATE_FILTER.from, to:DATE_FILTER.to };
+  return { from:null, to:null };
+}
+function inRange(dateStr) { const r=getFilterRange(); if(!r.from) return true; return dateStr>=r.from && dateStr<=r.to; }
+function filterRangeLabel() {
+  const p=DATE_FILTER.preset;
+  if(p==='today') return 'Today';
+  if(p==='7d') return 'Last 7 Days';
+  if(p==='30d') return 'Last 30 Days';
+  if(p==='90d') return 'Last 90 Days';
+  if(p==='custom'&&DATE_FILTER.from&&DATE_FILTER.to) return fmtDate(DATE_FILTER.from+'T00:00')+' – '+fmtDate(DATE_FILTER.to+'T00:00');
+  return 'All Time';
+}
+function buildFilterBar(containerId, pageName) {
+  const el=document.getElementById(containerId); if(!el) return;
+  const p=DATE_FILTER.preset, fromVal=DATE_FILTER.from||'', toVal=DATE_FILTER.to||todayISO();
+  el.innerHTML=`<div class="date-filter-bar">
+    <span class="date-filter-label">📅 Period</span>
+    <button class="date-filter-btn ${p==='today'?'active':''}" onclick="setPreset('today','${pageName}')">Today</button>
+    <button class="date-filter-btn ${p==='7d'?'active':''}" onclick="setPreset('7d','${pageName}')">Last 7 Days</button>
+    <button class="date-filter-btn ${p==='30d'?'active':''}" onclick="setPreset('30d','${pageName}')">Last 30 Days</button>
+    <button class="date-filter-btn ${p==='90d'?'active':''}" onclick="setPreset('90d','${pageName}')">Last 90 Days</button>
+    <button class="date-filter-btn ${p==='all'?'active':''}" onclick="setPreset('all','${pageName}')">All Time</button>
+    <div class="date-range-inputs">
+      <span class="date-filter-label" style="margin-right:0;">Custom:</span>
+      <input type="date" id="df-from" value="${fromVal}" max="${todayISO()}" />
+      <span class="date-range-sep">→</span>
+      <input type="date" id="df-to" value="${toVal}" max="${todayISO()}" />
+      <button class="date-range-apply" onclick="applyCustomRange('${pageName}')">Apply</button>
+    </div>
+    <span class="date-filter-chip">${filterRangeLabel()}</span>
+  </div>`;
+}
+function setPreset(preset, pageName) { DATE_FILTER.preset=preset; DATE_FILTER.from=null; DATE_FILTER.to=null; renderPage(pageName); }
+function applyCustomRange(pageName) {
+  const from=document.getElementById('df-from')?.value, to=document.getElementById('df-to')?.value;
+  if(from&&to&&from<=to) { DATE_FILTER.preset='custom'; DATE_FILTER.from=from; DATE_FILTER.to=to; renderPage(pageName); }
+}
+function getFilteredReport() {
+  const r=Analytics.getReport(), raw=Analytics.getData(), range=getFilterRange();
+  if(!range.from) return r;
+  const dailyViews=r.dailyViews.filter(d=>inRange(d.date));
+  const clicks=(raw.clicks||[]).filter(c=>inRange(c.date));
+  const loginAttempts=(raw.loginAttempts||[]).filter(c=>inRange(c.date));
+  const registrations=(raw.registrations||[]).filter(c=>inRange(c.date));
+  const pageViews=(raw.pageViews||[]).filter(p=>inRange(p.date));
+  const totalViews=pageViews.reduce((s,p)=>s+p.count,0);
+  const uniqueSessions=new Set(pageViews.flatMap(p=>p.sessions||[])).size;
+  const clicksByCategory=clicks.reduce((acc,c)=>{ acc[c.category]=(acc[c.category]||0)+1; return acc; },{});
+  const labelCounts=clicks.reduce((acc,c)=>{ acc[c.label]=(acc[c.label]||0)+1; return acc; },{});
+  const topClicks=Object.entries(labelCounts).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([label,count])=>({label,count}));
+  const roleInterest={tenant:0,landlord:0,manager:0};
+  [...loginAttempts,...registrations].forEach(e=>{ if(roleInterest[e.role]!==undefined) roleInterest[e.role]++; });
+  const tabSwitches={buy:clicks.filter(c=>c.label==='hero_tab_buy').length,rent:clicks.filter(c=>c.label==='hero_tab_rent').length};
+  return {...r,dailyViews,totalViews,uniqueSessions,totalClicks:clicks.length,totalLogins:loginAttempts.length,totalRegs:registrations.length,clicksByCategory,topClicks,roleInterest,tabSwitches,raw:{...raw,clicks,loginAttempts,registrations}};
+}
+
+/* ── LOCATIONS RENDER ──────────────────────────── */
+function renderContact() {
+  buildFilterBar('contact-date-filter','contact');
+  const raw = Analytics.getData();
+  const range = getFilterRange();
+  const events = (raw.contactEvents||[]).filter(e => inRange(e.date));
+
+  const pageViews    = events.filter(e=>e.type==='page_view').length;
+  const formStarts   = events.filter(e=>e.type==='form_start').length;
+  const attempts     = events.filter(e=>e.type==='form_submit_attempt').length;
+  const successes    = events.filter(e=>e.type==='form_submit_success').length;
+  const failures     = events.filter(e=>e.type==='form_submit_error').length;
+  const abandons     = events.filter(e=>e.type==='form_abandon').length;
+  const convRate     = formStarts > 0 ? Math.round((successes/formStarts)*100) : 0;
+
+  document.getElementById('contact-stats').innerHTML = `
+    <div class="stat-card" style="--stat-color:var(--a-primary)">
+      <div class="stat-icon">📄</div><div class="stat-label">Page Views</div>
+      <div class="stat-value">${pageViews}</div><div class="stat-sub">${filterRangeLabel()}</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#F59E0B">
+      <div class="stat-icon">✍️</div><div class="stat-label">Form Starts</div>
+      <div class="stat-value">${formStarts}</div><div class="stat-sub">Clicked a field</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#10B981">
+      <div class="stat-icon">✅</div><div class="stat-label">Submissions Sent</div>
+      <div class="stat-value">${successes}</div><div class="stat-sub">Emails delivered</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#8B5CF6">
+      <div class="stat-icon">📈</div><div class="stat-label">Conversion Rate</div>
+      <div class="stat-value">${convRate}%</div><div class="stat-sub">Starts → sent</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#EF4444">
+      <div class="stat-icon">🚪</div><div class="stat-label">Abandonments</div>
+      <div class="stat-value">${abandons}</div><div class="stat-sub">Left without sending</div>
+    </div>
+    <div class="stat-card" style="--stat-color:#06B6D4">
+      <div class="stat-icon">⚠️</div><div class="stat-label">Send Errors</div>
+      <div class="stat-value">${failures}</div><div class="stat-sub">EmailJS failures</div>
+    </div>`;
+
+  // Daily bar chart
+  const last14 = [];
+  for(let i=13;i>=0;i--) {
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const key=d.toISOString().slice(0,10);
+    const count=events.filter(e=>e.date===key&&(e.type==='form_submit_success'||e.type==='form_start')).length;
+    last14.push({label:fmtDate(d.toISOString()),shortLabel:key.slice(5),value:count});
+  }
+  makeBarChart('contact-bar-chart',last14,140);
+
+  // Role donut
+  const roleCounts={};
+  events.filter(e=>e.type==='role_selected'||e.type==='form_submit_success').forEach(e=>{
+    const r=e.detail?.role; if(r){ roleCounts[r]=(roleCounts[r]||0)+1; }
+  });
+  makeDonut('contact-role-donut',Object.entries(roleCounts).map(([label,value])=>({label,value})));
+
+  // Source donut
+  const sourceCounts={};
+  events.filter(e=>e.type==='source_selected').forEach(e=>{
+    const s=e.detail?.source; if(s){ sourceCounts[s]=(sourceCounts[s]||0)+1; }
+  });
+  makeDonut('contact-source-donut',Object.entries(sourceCounts).map(([label,value])=>({label,value})));
+
+  // Field engagement bars
+  const fieldCounts={};
+  const fieldNames={first:'First Name',last:'Last Name',email:'Email',phone:'Phone',role:'Role',subject:'Subject',message:'Message',hear:'How did you hear'};
+  events.filter(e=>e.type==='field_focus').forEach(e=>{
+    const f=e.detail?.field; if(f){ fieldCounts[f]=(fieldCounts[f]||0)+1; }
+  });
+  const fieldEl=document.getElementById('contact-field-bars');
+  document.getElementById('contact-fields-badge').textContent=Object.values(fieldCounts).reduce((s,v)=>s+v,0)+' total focuses';
+  if(!Object.keys(fieldCounts).length) {
+    fieldEl.innerHTML='<div class="empty-state"><div class="empty-state-icon">📝</div><p>No field interaction data yet.</p></div>';
+  } else {
+    const mx=Math.max(...Object.values(fieldCounts),1);
+    fieldEl.innerHTML=Object.entries(fieldCounts).sort((a,b)=>b[1]-a[1]).map(([f,c])=>`
+      <div class="section-bar-row">
+        <div class="section-bar-label"><span>${fieldNames[f]||f}</span><span>${c} focuses</span></div>
+        <div class="section-bar-track"><div class="section-bar-fill" style="width:${(c/mx)*100}%"></div></div>
+      </div>`).join('');
+  }
+
+  // Submission log
+  const logEvents = events.filter(e=>['form_submit_success','form_submit_attempt','form_submit_error','form_abandon'].includes(e.type)).slice(-20).reverse();
+  document.getElementById('contact-log-badge').textContent=logEvents.length+' entries';
+  const logBody=document.querySelector('#contact-log-table tbody');
+  const eventColors={'form_submit_success':'#10B981','form_submit_attempt':'#F59E0B','form_submit_error':'#EF4444','form_abandon':'#94A3B8'};
+  const eventLabels={'form_submit_success':'✅ Sent','form_submit_attempt':'📤 Attempted','form_submit_error':'⚠️ Error','form_abandon':'🚪 Abandoned'};
+  if(!logEvents.length) {
+    logBody.innerHTML='<tr><td colspan="5"><div class="empty-state"><div class="empty-state-icon">✉️</div><p>No contact form activity yet.</p></div></td></tr>';
+  } else {
+    logBody.innerHTML=logEvents.map(e=>{
+      const col=eventColors[e.type]||'#94A3B8';
+      const lbl=eventLabels[e.type]||e.type;
+      const ts=new Date(e.ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+      const role=e.detail?.role||'—';
+      const hear=e.detail?.hear||e.detail?.source||'—';
+      const phone=e.detail?.hasPhone===true?'✅':(e.detail?.hasPhone===false?'—':'—');
+      return `<tr>
+        <td style="font-size:0.78rem;color:var(--a-text3);">${ts}</td>
+        <td><span style="background:${col}22;color:${col};padding:0.15rem 0.6rem;border-radius:100px;font-size:0.7rem;font-weight:700;">${lbl}</span></td>
+        <td>${role}</td>
+        <td>${hear}</td>
+        <td>${phone}</td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function renderLocations() {
+  buildFilterBar('locations-date-filter','locations');
+  const raw=Analytics.getData(), range=getFilterRange();
+  let locs=(raw.locationVisits||[]);
+  if(range.from) {
+    locs=locs.map(l=>{ const fd=(l.dates||[]).filter(d=>d>=range.from&&d<=range.to); return {...l,count:fd.length}; }).filter(l=>l.count>0);
+  }
+  locs=[...locs].sort((a,b)=>b.count-a.count);
+  const totalVisits=locs.reduce((s,l)=>s+l.count,0), uniqueLocs=locs.length;
+  const uniqueStates=new Set(locs.map(l=>l.state).filter(Boolean)).size, topLoc=locs[0];
+  document.getElementById('location-stats').innerHTML=`
+    <div class="stat-card" style="--stat-color:var(--a-primary)"><div class="stat-icon">📍</div><div class="stat-label">Visits Tracked</div><div class="stat-value">${totalVisits.toLocaleString()}</div><div class="stat-sub">${filterRangeLabel()}</div></div>
+    <div class="stat-card" style="--stat-color:#10B981"><div class="stat-icon">🏙️</div><div class="stat-label">Unique Locations</div><div class="stat-value">${uniqueLocs}</div><div class="stat-sub">City/Zip combos</div></div>
+    <div class="stat-card" style="--stat-color:#F59E0B"><div class="stat-icon">🗺️</div><div class="stat-label">States Reached</div><div class="stat-value">${uniqueStates}</div><div class="stat-sub">Distinct states</div></div>
+    <div class="stat-card" style="--stat-color:#8B5CF6"><div class="stat-icon">🏆</div><div class="stat-label">Top Location</div><div class="stat-value" style="font-size:1rem;line-height:1.3;">${topLoc?topLoc.label:'—'}</div><div class="stat-sub">${topLoc?topLoc.count+' visits':'No data yet'}</div></div>`;
+  document.getElementById('loc-total-badge').textContent=uniqueLocs+' location'+(uniqueLocs!==1?'s':'');
+  const tbody=document.querySelector('#locations-table tbody');
+  if(!locs.length) {
+    tbody.innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">📍</div><p>No location data yet.<br><small>Visitors must allow location permission on the site.</small></p></div></td></tr>`;
+  } else {
+    tbody.innerHTML=locs.map((l,i)=>`
+      <tr>
+        <td><span class="rank-badge">${i+1}</span></td>
+        <td><strong>${l.city}</strong></td>
+        <td>${l.state||'—'}</td>
+        <td><span class="zip-tag">${l.zip||'—'}</span></td>
+        <td><span class="bar-inline" style="width:${Math.max((l.count/(locs[0]?.count||1))*80,6)}px"></span>${l.count}</td>
+        <td style="font-size:0.75rem;color:var(--a-text3);">${l.lastSeen?fmtDate(l.lastSeen+'T00:00'):'—'}</td>
+      </tr>`).join('');
+  }
+  makeDonut('location-donut',locs.slice(0,6).map(l=>({label:l.city,value:l.count})));
+  const last14=[];
+  for(let i=13;i>=0;i--) { const d=new Date(); d.setDate(d.getDate()-i); const key=d.toISOString().slice(0,10); const dayCount=locs.reduce((s,l)=>s+((l.dates||[]).filter(dt=>dt===key).length),0); last14.push({label:fmtDate(d.toISOString()),shortLabel:key.slice(5),value:dayCount}); }
+  makeBarChart('location-bar-chart',last14,140);
 }
 
 /* ── CLEAR ──────────────────────────────────────────────── */

@@ -129,7 +129,7 @@
   .stat-divider { width: 1px; height: 40px; background: var(--border-strong); }
 
   /* Value prop section */
-  #value-prop { background: var(--bg); padding: 2rem 2rem 4rem; transition: background 0.35s; }
+  #value-prop { background: var(--bg-card); padding: 2rem 2rem 4rem; transition: background 0.35s; border-top: 1px solid var(--border); }
   .vp-mode-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3.5rem; }
   .vp-tab {
     padding: 0.6rem 1.8rem; border-radius: 100px;
@@ -197,7 +197,7 @@
   .pillar-tag { display: inline-block; margin-top: 1rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 100px; background: color-mix(in srgb, var(--pillar-color) 12%, transparent); color: var(--pillar-color); }
 
   /* How It Works */
-  #how-it-works { background: var(--team-bg); padding: 3.5rem 2rem; transition: background 0.35s; }
+  #how-it-works { background: var(--bg-subtle); padding: 3.5rem 2rem; transition: background 0.35s; }
   .how-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
   .how-tab { padding: 0.6rem 1.4rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.875rem; font-weight: 600; border: 2px solid var(--border-strong); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; transition: all var(--transition); }
   .how-tab.active { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 4px 16px var(--blue-dim); }
@@ -212,14 +212,14 @@
   .step-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
 
   /* CTA band */
-  #pricing-nudge { background: var(--blue); padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  #pricing-nudge { background: var(--footer-bg); padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden; }
   #pricing-nudge::before { content: ''; position: absolute; top: -100px; left: -100px; width: 400px; height: 400px; border-radius: 50%; background: rgba(255,255,255,0.06); pointer-events: none; }
   .nudge-eyebrow { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1rem; }
   .nudge-title { font-family: var(--font-display); font-size: clamp(2rem,5vw,3.2rem); font-weight: 700; color: #fff; margin-bottom: 1rem; line-height: 1.1; letter-spacing: -0.02em; }
   .nudge-sub { font-size: 1.05rem; color: rgba(255,255,255,0.8); max-width: 540px; margin: 0 auto 2.5rem; line-height: 1.7; }
   .nudge-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-  .nudge-btn-primary { background: #fff; color: var(--blue); padding: 0.85rem 2rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.9375rem; font-weight: 700; border: none; cursor: pointer; transition: all var(--transition); box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-decoration: none; display: inline-block; }
-  .nudge-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+  .nudge-btn-primary { background: var(--blue); color: #fff; padding: 0.85rem 2rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.9375rem; font-weight: 700; border: none; cursor: pointer; transition: all var(--transition); box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-decoration: none; display: inline-block; }
+  .nudge-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.35); filter: brightness(1.08); }
   .nudge-btn-secondary { background: transparent; color: #fff; padding: 0.85rem 2rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.9375rem; font-weight: 700; border: 2px solid rgba(255,255,255,0.4); cursor: pointer; transition: all var(--transition); text-decoration: none; display: inline-block; }
   .nudge-btn-secondary:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); }
   .nudge-perks { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
@@ -269,7 +269,7 @@
       <li><a href="index.html#mode-rent" id="nav-rent-link">Rent <span style="font-size:0.6rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);vertical-align:middle;margin-left:3px;">Soon</span></a></li>
       <li><a href="features.html">Features</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="contact.html" class="nav-contact-cta">✉️ Contact Us</a></li>
       <li><a href="admin/index.html" style="color:var(--blue);font-weight:600;">📊 Admin</a></li>
       <li><a href="#" class="nav-cta user-type-pill" data-type="tenant" data-mode="login">Sign In</a></li>
     </ul>
@@ -283,7 +283,7 @@
     <a href="index.html#mode-rent" role="menuitem">Rent <span style="font-size:0.6rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:100px;background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);margin-left:3px;">Soon</span></a>
     <a href="features.html" role="menuitem">Features</a>
     <a href="about.html" role="menuitem">About</a>
-    <a href="contact.html" role="menuitem">Contact</a>
+    <a href="contact.html" role="menuitem" style="color:var(--blue);font-weight:700;">✉️ Contact Us</a>
     <a href="admin/index.html" role="menuitem" style="color:var(--blue);">📊 Admin</a>
     <a href="#" role="menuitem" class="nav-cta user-type-pill" data-type="tenant" data-mode="login" style="text-align:center;">Sign In</a>
   </div>
@@ -365,7 +365,7 @@
             </button>
             <button class="role-btn" data-role="manager">
               <span class="role-btn-icon">📋</span>
-              <span class="role-btn-name">Manager</span>
+              <span class="role-btn-name">Property Manager</span>
               <span class="role-btn-sub">Manage portfolios</span>
             </button>
           </div>
@@ -463,14 +463,19 @@
       <header class="section-header">
         <span class="section-eyebrow">Simple by Design</span>
         <h2 class="section-title" id="how-heading">How It <em>Works</em></h2>
-        <p class="section-desc">Whether buying, selling, or renting — we've mapped out every step so you always know what comes next.</p>
+        <p class="section-desc" id="how-desc-buy">From your first consultation to keys in hand — we've mapped out every step for buyers and sellers.</p>
+        <p class="section-desc" id="how-desc-rent" style="display:none;">From finding a home to managing a full portfolio — here's how we make renting simple for everyone.</p>
       </header>
-      <div class="how-tabs" role="tablist" aria-label="How it works by role">
+      <!-- Buy mode tabs -->
+      <div class="how-tabs how-tabs-buy" role="tablist" aria-label="How it works for buyers and sellers">
         <button class="how-tab active" data-panel="how-buyer" role="tab" aria-selected="true">For Buyers</button>
         <button class="how-tab" data-panel="how-seller" role="tab" aria-selected="false">For Sellers</button>
+      </div>
+      <!-- Rent mode tabs -->
+      <div class="how-tabs how-tabs-rent" role="tablist" aria-label="How it works for renters" style="display:none;">
+        <button class="how-tab active" data-panel="how-tenant" role="tab" aria-selected="true">For Tenants</button>
         <button class="how-tab" data-panel="how-landlord" role="tab" aria-selected="false">For Landlords</button>
-        <button class="how-tab" data-panel="how-tenant" role="tab" aria-selected="false">For Tenants</button>
-        <button class="how-tab" data-panel="how-manager" role="tab" aria-selected="false">For Managers</button>
+        <button class="how-tab" data-panel="how-manager" role="tab" aria-selected="false">For Property Managers</button>
       </div>
 
       <div class="how-panel active" id="how-buyer" role="tabpanel">
@@ -520,34 +525,24 @@
     </div>
   </section>
 
-  <!-- ═══ CTA BAND ══════════════════════════════════════════ -->
-  <section id="pricing-nudge" aria-label="Call to action">
-    <p class="nudge-eyebrow">Buy · Sell · Rent · Manage — All under one roof</p>
-    <h2 class="nudge-title">Your Full-Service<br />Real Estate Partner</h2>
-    <p class="nudge-sub">Whether you're buying your first home, selling to move up, or managing a rental portfolio — Harvin Properties is with you every step of the way.</p>
-    <div class="nudge-btns">
-      <a href="contact.html" class="nudge-btn-primary">Get Started — It's Free →</a>
-      <a href="buy.html" class="nudge-btn-secondary">Explore Buy &amp; Sell</a>
+  <!-- ═══ CONTACT NUDGE BAND ═══════════════════════════════════════ -->
+  <div class="contact-nudge-band" aria-label="Contact call to action">
+    <div class="contact-nudge-inner">
+      <p class="contact-nudge-eyebrow">📍 Serving Greater Seattle &amp; Maple Valley, WA</p>
+      <h2 class="contact-nudge-title">Ready to Get Started?<br/>We'd Love to Hear from You.</h2>
+      <p class="contact-nudge-sub">Whether you're buying, selling, or renting — our team responds within 1 business day. No pressure, no obligation.</p>
+      <div class="contact-nudge-btns">
+        <a href="contact.html" class="contact-nudge-btn-primary">✉️ Send Us a Message →</a>
+        <a href="tel:+19016511035" class="contact-nudge-btn-secondary">📞 Call 901-651-1035</a>
+      </div>
+      <div class="contact-nudge-trust">
+        <span class="contact-nudge-trust-item">Free consultation</span>
+        <span class="contact-nudge-trust-item">Reply within 1 business day</span>
+        <span class="contact-nudge-trust-item">No hidden fees</span>
+        <span class="contact-nudge-trust-item">Local PNW experts</span>
+      </div>
     </div>
-    <div class="nudge-perks">
-      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> Free consultation</span>
-      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> No hidden fees</span>
-      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> Pacific NW experts</span>
-      <span class="nudge-perk"><span class="nudge-perk-dot">✓</span> One platform for everything</span>
-    </div>
-  </section>
-
-  <!-- ═══ TEAM ═══════════════════════════════════════════════ -->
-  <section id="team" aria-labelledby="team-heading">
-    <div class="container">
-      <header class="section-header">
-        <span class="section-eyebrow">The People Behind Harvin Properties</span>
-        <h2 class="section-title" id="team-heading">Meet the <em>Team</em></h2>
-        <p class="section-desc">Real estate professionals and technologists committed to making property ownership and renting simpler for everyone.</p>
-      </header>
-      <div class="team-grid" id="team-grid" role="list" aria-label="Team members"></div>
-    </div>
-  </section>
+  </div>
 
   <!-- ═══ FOOTER ════════════════════════════════════════════ -->
   <footer id="footer" role="contentinfo">
@@ -593,6 +588,114 @@
   <script src="js/config.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/app.js"></script>
+
+  <!-- ═══ FLOATING CONTACT FAB ════════════════════════════════ -->
+  <div id="contact-fab" style="
+    position:fixed; bottom:5.5rem; right:1.5rem; z-index:8999;
+    display:flex; flex-direction:column; align-items:flex-end; gap:0;
+  ">
+    <!-- Expanded card -->
+    <div id="contact-fab-card" style="
+      display:none; flex-direction:column; gap:0;
+      background:var(--bg-card); border:1px solid var(--border-strong);
+      border-radius:18px; overflow:hidden;
+      box-shadow:0 8px 32px rgba(0,0,0,0.18), 0 2px 8px var(--blue-dim);
+      width:240px; margin-bottom:0.6rem;
+      transform:translateY(8px); opacity:0;
+      transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.18s ease;
+    ">
+      <!-- Card header -->
+      <div style="background:var(--blue);padding:1rem 1.1rem 0.85rem;">
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.75);margin-bottom:0.25rem;">Get in Touch</div>
+        <div style="font-size:1rem;font-weight:700;color:#fff;line-height:1.25;">Harvin Properties</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.82);margin-top:0.15rem;">We reply within 1 business day</div>
+      </div>
+      <!-- Card body -->
+      <div style="padding:0.85rem 1.1rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <a href="tel:+19016511035" onclick="if(typeof Analytics!=='undefined')Analytics.trackClick('contact_fab_phone','contact_fab');" style="
+          display:flex;align-items:center;gap:0.6rem;
+          font-size:0.85rem;font-weight:600;color:var(--text-primary);
+          text-decoration:none;padding:0.5rem 0.65rem;border-radius:9px;
+          background:var(--bg-subtle);border:1px solid var(--border-strong);
+          transition:all 0.15s;
+        " onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)';" onmouseout="this.style.borderColor='';this.style.color='';">
+          <span style="font-size:1rem;">📞</span>
+          <span>901-651-1035</span>
+        </a>
+        <a href="mailto:hello@harvinproperties.com" onclick="if(typeof Analytics!=='undefined')Analytics.trackClick('contact_fab_email','contact_fab');" style="
+          display:flex;align-items:center;gap:0.6rem;
+          font-size:0.85rem;font-weight:600;color:var(--text-primary);
+          text-decoration:none;padding:0.5rem 0.65rem;border-radius:9px;
+          background:var(--bg-subtle);border:1px solid var(--border-strong);
+          transition:all 0.15s;
+        " onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)';" onmouseout="this.style.borderColor='';this.style.color='';">
+          <span style="font-size:1rem;">✉️</span>
+          <span>hello@harvinproperties.com</span>
+        </a>
+        <a href="contact.html" onclick="if(typeof Analytics!=='undefined')Analytics.trackClick('contact_fab_form','contact_fab');" style="
+          display:flex;align-items:center;justify-content:center;gap:0.5rem;
+          font-size:0.875rem;font-weight:700;color:#fff;
+          text-decoration:none;padding:0.65rem;border-radius:9px;
+          background:var(--blue);
+          box-shadow:0 3px 12px var(--blue-dim);
+          transition:all 0.15s;
+        " onmouseover="this.style.filter='brightness(1.08)';this.style.transform='translateY(-1px)';" onmouseout="this.style.filter='';this.style.transform='';">
+          Send a Message &nbsp;→
+        </a>
+      </div>
+    </div>
+    <!-- FAB button -->
+    <div style="position:relative;">
+      <div style="
+        position:absolute;inset:-6px;border-radius:50%;
+        background:var(--blue-dim);
+        animation:contactPulse 2.2s ease-in-out infinite;
+        pointer-events:none;
+      "></div>
+      <button id="contact-fab-btn" aria-label="Contact Harvin Properties" onclick="toggleContactFab()" style="
+        width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
+        background:var(--blue);
+        color:#fff;font-size:1.25rem;
+        box-shadow:0 4px 20px var(--blue-dim);
+        transition:all 0.22s;
+        display:flex;align-items:center;justify-content:center;
+        position:relative;z-index:1;
+      ">💬</button>
+    </div>
+  </div>
+  <style>
+    @keyframes contactPulse {
+      0%,100% { transform:scale(1); opacity:0.6; }
+      50%      { transform:scale(1.35); opacity:0; }
+    }
+  </style>
+  <script>
+  (function(){
+    var open = false;
+    var card = document.getElementById('contact-fab-card');
+    var btn  = document.getElementById('contact-fab-btn');
+    function toggleContactFab() {
+      open = !open;
+      if (open) {
+        card.style.display = 'flex';
+        setTimeout(function(){ card.style.transform='translateY(0)'; card.style.opacity='1'; }, 10);
+        btn.style.transform = 'rotate(15deg) scale(1.08)';
+        if (typeof Analytics !== 'undefined') Analytics.trackClick('contact_fab_open','contact_fab');
+      } else {
+        card.style.transform = 'translateY(8px)';
+        card.style.opacity = '0';
+        setTimeout(function(){ card.style.display='none'; }, 200);
+        btn.style.transform = '';
+      }
+    }
+    window.toggleContactFab = toggleContactFab;
+    document.addEventListener('click', function(e) {
+      if (open && !document.getElementById('contact-fab').contains(e.target)) {
+        toggleContactFab();
+      }
+    });
+  })();
+  </script>
 
   <!-- ═══ THEME SWITCHER WIDGET ══════════════════════════════ -->
   <div id="theme-switcher-fab" aria-label="Change site theme" style="
@@ -668,6 +771,21 @@
         if (activeVpTab) activeVpTab.classList.add('active');
         const activeVpPanel = document.getElementById(vpTarget);
         if (activeVpPanel) activeVpPanel.classList.add('active');
+
+        // Sync the "How It Works" tab sets to match the hero toggle
+        const isBuy = mode === 'buy';
+        document.querySelector('.how-tabs-buy').style.display  = isBuy ? 'flex' : 'none';
+        document.querySelector('.how-tabs-rent').style.display = isBuy ? 'none' : 'flex';
+        document.getElementById('how-desc-buy').style.display  = isBuy ? '' : 'none';
+        document.getElementById('how-desc-rent').style.display = isBuy ? 'none' : '';
+        // Reset all panels, activate the default for the new mode
+        document.querySelectorAll('.how-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.how-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+        const defaultPanel = isBuy ? 'how-buyer' : 'how-tenant';
+        const defaultTabSet = isBuy ? '.how-tabs-buy' : '.how-tabs-rent';
+        document.getElementById(defaultPanel).classList.add('active');
+        document.querySelector(defaultTabSet + ' .how-tab').classList.add('active');
+        document.querySelector(defaultTabSet + ' .how-tab').setAttribute('aria-selected','true');
       });
     });
 
@@ -711,7 +829,9 @@
     /* ── How It Works tabs ── */
     document.querySelectorAll('.how-tab').forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.how-tab').forEach(t => {
+        // Only deactivate tabs in the same tablist
+        const parentList = tab.closest('[role="tablist"]');
+        parentList.querySelectorAll('.how-tab').forEach(t => {
           t.classList.remove('active');
           t.setAttribute('aria-selected', 'false');
         });
